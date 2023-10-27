@@ -1,7 +1,7 @@
 
 
 NAME = minishell
-SRCS =   main.c
+SRCS =   main.c token.c factory.c
 OBJS = $($(addprefix src/,${SRCS}):.c=.o)
 INC  = src/minishell.h
 
