@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbourgue <fbourgue@student.42.fr>          +#+  +:+       +#+        */
+/*   By: slecoq <slecoq@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 23:09:47 by fbourgue          #+#    #+#             */
-/*   Updated: 2023/10/26 23:34:40 by fbourgue         ###   ########.fr       */
+/*   Updated: 2023/10/27 16:11:09 by slecoq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,6 @@ int	main(int ac, char **av, char **env)
 		char	*s = tab_cmdline[i];
 		tok_root = parse(&s);
 		dbg_tok(tok_root);
-
 		interprete(tok_root);
 	}
 }
