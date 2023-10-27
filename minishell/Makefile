@@ -1,9 +1,9 @@
 
 
 NAME = minishell
-SRCS =   main.c token.c factory.c
+SRCS =   main.c token.c factory.c builtin.c execute.c
 OBJS = $($(addprefix src/,${SRCS}):.c=.o)
-INC  = src/minishell.h
+INC  = src/minishell.h /usr/include/readline/readline.h
 
 LIBFT_NAME = lib/libft.a
 LIBFT = src/libft
