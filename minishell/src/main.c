@@ -65,25 +65,34 @@ t_tok	*parse(char **s)
 	return (tok_root);
 }
 
-void	interpret(t_tok	*tok_root)
+void	dbg_tok(t_tok	*tok_root)
 {
-
-}
-
-int	main(int ac, char **av)
-{
-	t_tok	*tok_root;
-
-	char	*s = "cat  run.sh > t";
-	tok_root = parse(&s);
-
 	t_tok	*t = tok_root;
 	while(t)
 	{
-		printf("%d\t%s\n", t->type, t->val);
+		printf("\tDBG\t%d\t%s\n", t->type, t->val);
 		t = t->suivant;
 	}
 
-//	while(*s != 0)
-//		write(1, s++, 1);
+}
+
+
+int	main(int ac, char **av, char **env)
+{
+	t_tok	*tok_root;
+
+//	char	*s = "cat  run.sh > t";
+//	char	*s = "ls";
+
+	char	*tab_cmdline[] = {"pwd", "cd ..", "pwd", "cd ..", "pwd", "ls",  "\0" };
+	int	i=-1;
+
+	while(tab_cmdline[++i])
+	{
+		char	*s = tab_cmdline[i];
+		tok_root = parse(&s);
+		dbg_tok(tok_root);
+
+		interprete(tok_root);
+	}
 }

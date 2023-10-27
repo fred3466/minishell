@@ -13,7 +13,17 @@
 #ifndef MINISHELL_C
 #define MINISHELL_C
 
-# include <unistd.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <readline/readline.h>
+#include <readline/history.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <signal.h>
+#include <sys/wait.h>
+
+#include <sys/stat.h>
+
 #include "libft/libft.h"
 
 typedef enum e_tok_typetok
@@ -51,5 +61,10 @@ t_tok	*create_tok(char **val, t_tok *tok_last);
 t_tok	*tok_create(char *val, t_tok_type type);
 
 void	on_spaces(char **s);
+
+int	interprete(t_tok	*ct);
+int	bi_ls(t_tok	*ct, char **sout, char **serr);
+int	bi_cd(t_tok *ct, char **sout, char **serr);
+int	bi_pwd(t_tok *ct, char **sout, char **serr);
 
 #endif
