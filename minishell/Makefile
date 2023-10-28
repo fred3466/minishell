@@ -1,7 +1,7 @@
 
 
 NAME = minishell
-SRCS =   main.c token.c factory.c builtin.c execute.c
+SRCS =   main.c token.c factory.c builtin.c execute.c execute_utils.c
 OBJS = $($(addprefix src/,${SRCS}):.c=.o)
 INC  = src/minishell.h /usr/include/readline/readline.h
 
