@@ -1,28 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   factory.c                                          :+:      :+:    :+:   */
+/*   ft_strmapi.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fbourgue <fbourgue@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/26 23:35:02 by fbourgue          #+#    #+#             */
-/*   Updated: 2023/10/26 23:36:22 by fbourgue         ###   ########.fr       */
+/*   Created: 2023/03/26 16:26:09 by fbourgue          #+#    #+#             */
+/*   Updated: 2023/03/31 12:15:02 by fbourgue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
+#include <stdlib.h>
 
-t_tok	*tok_create(char *val, t_tok_type type)
+char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 {
-	t_tok	*tok;
+	int		i;
+	char	*r;
 
-	tok = (t_tok *)ft_calloc(1, sizeof(t_tok));
-	if (!tok)
+	if (!s)
 		return (NULL);
-	tok->val = val;
-	tok->type = type;
-	tok->precedent = NULL;
-	tok->suivant = NULL;
-	tok->brulé = 0;
-	return (tok);
+	r = malloc(sizeof(char) * ft_strlen(s) + 1);
+	if (!r)
+		return (NULL);
+	i = 0;
+	while (s[i] != '\0')
+	{
+		r[i] = f(i, s[i]);
+		i++;
+	}
+	r[i] = '\0';
+	return (r);
 }

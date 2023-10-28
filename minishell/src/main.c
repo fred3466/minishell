@@ -84,7 +84,8 @@ int	main(int ac, char **av, char **env)
 //	char	*s = "cat  run.sh > t";
 //	char	*s = "ls";
 
-	char	*tab_cmdline[] = {"pwd", "cd ..", "pwd", "cd ..", "pwd", "ls",  "\0" };
+//	char	*tab_cmdline[] = {"ls", "pwd", "cd ..", "pwd", "cd ..", "pwd", "ls",  "\0" };
+	char	*tab_cmdline[] = {"cp toto_to_born toto",  "ls", "cat toto", "rm toto", "\0" };
 	int	i=-1;
 
 	while(tab_cmdline[++i])
@@ -93,6 +94,6 @@ int	main(int ac, char **av, char **env)
 		tok_root = parse(&s);
 		dbg_tok(tok_root);
 
-		interprete(tok_root);
+		interprete(tok_root, env);
 	}
 }

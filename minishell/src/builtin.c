@@ -2,7 +2,10 @@
 
 int	bi_cd(t_tok	*ct, char **sout, char **serr)
 {
-	chdir(ct->suivant->val);
+	char	** args;
+
+	args = donne_moi_des_arguments(ct, 1);
+	chdir(args[0]);
 	return 0;
 }
 

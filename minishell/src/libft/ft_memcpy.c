@@ -1,28 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   factory.c                                          :+:      :+:    :+:   */
+/*   ft_memcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fbourgue <fbourgue@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/26 23:35:02 by fbourgue          #+#    #+#             */
-/*   Updated: 2023/10/26 23:36:22 by fbourgue         ###   ########.fr       */
+/*   Created: 2023/03/21 17:32:35 by fbourgue          #+#    #+#             */
+/*   Updated: 2023/04/04 15:11:52 by fbourgue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include <strings.h>
+#include <stdlib.h>
 
-t_tok	*tok_create(char *val, t_tok_type type)
+void	*ft_memcpy(void *dest, const void *src, size_t n)
 {
-	t_tok	*tok;
+	char	*dd;
+	char	*ss;
 
-	tok = (t_tok *)ft_calloc(1, sizeof(t_tok));
-	if (!tok)
+	if ((src == NULL && dest == NULL))
 		return (NULL);
-	tok->val = val;
-	tok->type = type;
-	tok->precedent = NULL;
-	tok->suivant = NULL;
-	tok->brulé = 0;
-	return (tok);
+	dd = (char *)dest;
+	ss = (char *)src;
+	while (n--)
+	{
+		*dd++ = *ss++;
+	}
+	return (dest);
 }

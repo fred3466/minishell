@@ -1,28 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   factory.c                                          :+:      :+:    :+:   */
+/*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fbourgue <fbourgue@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/26 23:35:02 by fbourgue          #+#    #+#             */
-/*   Updated: 2023/10/26 23:36:22 by fbourgue         ###   ########.fr       */
+/*   Created: 2023/02/03 12:11:41 by fbourgue          #+#    #+#             */
+/*   Updated: 2023/03/29 23:11:17 by fbourgue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
+#include <stdlib.h>
 
-t_tok	*tok_create(char *val, t_tok_type type)
+char	*ft_strdup(char *src)
 {
-	t_tok	*tok;
+	char	*dest;
+	int		len;
+	int		i;
 
-	tok = (t_tok *)ft_calloc(1, sizeof(t_tok));
-	if (!tok)
+	len = ft_strlen(src);
+	if (!len)
 		return (NULL);
-	tok->val = val;
-	tok->type = type;
-	tok->precedent = NULL;
-	tok->suivant = NULL;
-	tok->brulé = 0;
-	return (tok);
+	dest = malloc((len + 1) * sizeof(char));
+	if (! dest)
+		return (NULL);
+	i = 0;
+	while (src[i])
+	{
+		dest[i] = src[i];
+		i++;
+	}
+	dest[i] = '\0';
+	return (dest);
 }

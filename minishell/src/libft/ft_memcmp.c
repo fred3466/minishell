@@ -1,28 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   factory.c                                          :+:      :+:    :+:   */
+/*   ft_memcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fbourgue <fbourgue@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/26 23:35:02 by fbourgue          #+#    #+#             */
-/*   Updated: 2023/10/26 23:36:22 by fbourgue         ###   ########.fr       */
+/*   Created: 2023/02/03 15:18:57 by fbourgue          #+#    #+#             */
+/*   Updated: 2023/03/22 18:02:28 by fbourgue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include <stddef.h>
 
-t_tok	*tok_create(char *val, t_tok_type type)
+int	ft_memcmp(const void *s1, const void *s2, size_t n)
 {
-	t_tok	*tok;
+	size_t			i;
+	int				delta;
+	unsigned char	*ss1;
+	unsigned char	*ss2;
 
-	tok = (t_tok *)ft_calloc(1, sizeof(t_tok));
-	if (!tok)
-		return (NULL);
-	tok->val = val;
-	tok->type = type;
-	tok->precedent = NULL;
-	tok->suivant = NULL;
-	tok->brulé = 0;
-	return (tok);
+	delta = 0;
+	if (n == 0)
+		return (0);
+	ss1 = ((unsigned char *) s1);
+	ss2 = ((unsigned char *) s2);
+	i = 0;
+	while (i < n)
+	{
+		delta = ss1[i] - ss2[i];
+		if (delta != 0)
+			return (delta);
+		i++;
+	}
+	return (delta);
 }

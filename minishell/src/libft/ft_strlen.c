@@ -1,28 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   factory.c                                          :+:      :+:    :+:   */
+/*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fbourgue <fbourgue@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/26 23:35:02 by fbourgue          #+#    #+#             */
-/*   Updated: 2023/10/26 23:36:22 by fbourgue         ###   ########.fr       */
+/*   Created: 2023/02/03 12:12:24 by fbourgue          #+#    #+#             */
+/*   Updated: 2023/03/14 17:27:22 by fbourgue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include <stddef.h>
 
-t_tok	*tok_create(char *val, t_tok_type type)
+size_t	ft_strlen(const char *str)
 {
-	t_tok	*tok;
+	size_t	i;
 
-	tok = (t_tok *)ft_calloc(1, sizeof(t_tok));
-	if (!tok)
-		return (NULL);
-	tok->val = val;
-	tok->type = type;
-	tok->precedent = NULL;
-	tok->suivant = NULL;
-	tok->brulé = 0;
-	return (tok);
+	i = 0;
+	while (str && str[i])
+	{
+		i++;
+	}
+	return (i);
 }

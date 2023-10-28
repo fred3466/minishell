@@ -1,28 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   factory.c                                          :+:      :+:    :+:   */
+/*   ft_memchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fbourgue <fbourgue@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/26 23:35:02 by fbourgue          #+#    #+#             */
-/*   Updated: 2023/10/26 23:36:22 by fbourgue         ###   ########.fr       */
+/*   Created: 2023/03/22 16:43:59 by fbourgue          #+#    #+#             */
+/*   Updated: 2023/03/31 17:03:42 by fbourgue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include <string.h>
 
-t_tok	*tok_create(char *val, t_tok_type type)
+void	*ft_memchr(const void *s, int c, size_t n)
 {
-	t_tok	*tok;
+	size_t			i;
+	unsigned char	*cf;
 
-	tok = (t_tok *)ft_calloc(1, sizeof(t_tok));
-	if (!tok)
-		return (NULL);
-	tok->val = val;
-	tok->type = type;
-	tok->precedent = NULL;
-	tok->suivant = NULL;
-	tok->brulé = 0;
-	return (tok);
+	i = 0;
+	cf = NULL;
+	while (i < n)
+	{
+		cf = &(*((unsigned char *)s + i));
+		if (*cf == (unsigned char)c)
+			return (cf);
+		i++;
+	}
+	return (NULL);
 }

@@ -1,28 +1,43 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   factory.c                                          :+:      :+:    :+:   */
+/*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fbourgue <fbourgue@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/26 23:35:02 by fbourgue          #+#    #+#             */
-/*   Updated: 2023/10/26 23:36:22 by fbourgue         ###   ########.fr       */
+/*   Created: 2023/03/10 16:49:23 by fbourgue          #+#    #+#             */
+/*   Updated: 2023/08/27 21:47:10 by fbourgue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-t_tok	*tok_create(char *val, t_tok_type type)
+char	*ft_strchr(const char *s, int c)
 {
-	t_tok	*tok;
+	size_t		i;
 
-	tok = (t_tok *)ft_calloc(1, sizeof(t_tok));
-	if (!tok)
+	if (! s)
 		return (NULL);
-	tok->val = val;
-	tok->type = type;
-	tok->precedent = NULL;
-	tok->suivant = NULL;
-	tok->brulé = 0;
-	return (tok);
+	i = 0;
+	while (i < ft_strlen(s) + 1)
+	{
+		if (s[i] == (char)c)
+			return ((char *)&(s[i]));
+		i++;
+	}
+	return (NULL);
+}
+
+int	ft_strpos(const char *s, int c)
+{
+	size_t		i;
+
+	i = 0;
+	while (i < ft_strlen(s) + 1)
+	{
+		if (s[i] == (char)c)
+			return (i);
+		i++;
+	}
+	return (-1);
 }

@@ -1,28 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   factory.c                                          :+:      :+:    :+:   */
+/*   ft_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fbourgue <fbourgue@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/26 23:35:02 by fbourgue          #+#    #+#             */
-/*   Updated: 2023/10/26 23:36:22 by fbourgue         ###   ########.fr       */
+/*   Created: 2023/03/31 14:54:09 by fbourgue          #+#    #+#             */
+/*   Updated: 2023/03/31 15:47:43 by fbourgue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
+#include <stdlib.h>
 
-t_tok	*tok_create(char *val, t_tok_type type)
+char	*ft_strtrim(char const *s1, char const *set)
 {
-	t_tok	*tok;
+	int		i;
+	int		j;
+	int		sz1;
+	char	*r;
 
-	tok = (t_tok *)ft_calloc(1, sizeof(t_tok));
-	if (!tok)
+	i = 0;
+	j = 0;
+	sz1 = ft_strlen(s1);
+	if (ft_strchr(set, s1[0]))
+		while (ft_strchr(set, s1[i]))
+			i++;
+	j = sz1 - 1;
+	if (ft_strchr(set, s1[j]))
+		while (ft_strchr(set, s1[j]))
+			j--;
+	j++;
+	r = ft_substr(s1, i, (j - i));
+	if (! r)
 		return (NULL);
-	tok->val = val;
-	tok->type = type;
-	tok->precedent = NULL;
-	tok->suivant = NULL;
-	tok->brulé = 0;
-	return (tok);
+	r[j - i + 1] = '\0';
+	return (r);
 }

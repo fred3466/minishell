@@ -1,28 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   factory.c                                          :+:      :+:    :+:   */
+/*   ft_strlcat.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fbourgue <fbourgue@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/26 23:35:02 by fbourgue          #+#    #+#             */
-/*   Updated: 2023/10/26 23:36:22 by fbourgue         ###   ########.fr       */
+/*   Created: 2023/03/07 14:25:26 by fbourgue          #+#    #+#             */
+/*   Updated: 2023/03/08 17:29:43 by fbourgue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-t_tok	*tok_create(char *val, t_tok_type type)
+unsigned int	ft_strlcat(char *dest, char *src, unsigned int size)
 {
-	t_tok	*tok;
+	unsigned int	n;
+	unsigned int	ds;
+	unsigned int	ss;
 
-	tok = (t_tok *)ft_calloc(1, sizeof(t_tok));
-	if (!tok)
-		return (NULL);
-	tok->val = val;
-	tok->type = type;
-	tok->precedent = NULL;
-	tok->suivant = NULL;
-	tok->brulé = 0;
-	return (tok);
+	ds = ft_strlen(dest);
+	ss = ft_strlen(src);
+	n = 0;
+	if (size == 0 || ds >= size)
+		return (size + ss);
+	if (!*src)
+		return (ds);
+	while ((src[n]) && size && (n < size - ds - 1))
+	{
+		dest[ds + n] = src[n];
+		n++;
+	}
+	dest[ds + n] = 0;
+	return (ss + ds);
 }

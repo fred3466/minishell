@@ -1,28 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   factory.c                                          :+:      :+:    :+:   */
+/*   ft_strcreate.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fbourgue <fbourgue@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/26 23:35:02 by fbourgue          #+#    #+#             */
-/*   Updated: 2023/10/26 23:36:22 by fbourgue         ###   ########.fr       */
+/*   Created: 2023/09/08 16:36:35 by fbourgue          #+#    #+#             */
+/*   Updated: 2023/09/11 12:18:42 by fbourgue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+#include <stdlib.h>
+#include "libft.h"
 
-#include "minishell.h"
-
-t_tok	*tok_create(char *val, t_tok_type type)
+char	*ft_strcreate(size_t size)
 {
-	t_tok	*tok;
+	char	*rtn;
 
-	tok = (t_tok *)ft_calloc(1, sizeof(t_tok));
-	if (!tok)
-		return (NULL);
-	tok->val = val;
-	tok->type = type;
-	tok->precedent = NULL;
-	tok->suivant = NULL;
-	tok->brulé = 0;
-	return (tok);
+	rtn = (char *)malloc(size + 1);
+	if (rtn != (char *) NULL)
+		ft_bzero((void *)rtn, size + 1);
+	return (rtn);
 }

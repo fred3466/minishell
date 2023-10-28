@@ -1,28 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   factory.c                                          :+:      :+:    :+:   */
+/*   ft_strlcpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fbourgue <fbourgue@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/26 23:35:02 by fbourgue          #+#    #+#             */
-/*   Updated: 2023/10/26 23:36:22 by fbourgue         ###   ########.fr       */
+/*   Created: 2023/02/03 12:12:12 by fbourgue          #+#    #+#             */
+/*   Updated: 2023/03/09 16:46:58 by fbourgue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-t_tok	*tok_create(char *val, t_tok_type type)
+unsigned int	ft_strlcpy(char *dest, char *src, unsigned int size)
 {
-	t_tok	*tok;
+	unsigned int	n;
+	unsigned int	ss;
 
-	tok = (t_tok *)ft_calloc(1, sizeof(t_tok));
-	if (!tok)
-		return (NULL);
-	tok->val = val;
-	tok->type = type;
-	tok->precedent = NULL;
-	tok->suivant = NULL;
-	tok->brulé = 0;
-	return (tok);
+	ss = ft_strlen(src);
+	n = 0;
+	if (size == 0)
+		return (ss);
+	while ((src[n] != 0) && (n < size - 1))
+	{
+		dest[n] = src[n];
+		n++;
+	}
+	dest[n] = 0;
+	return (ss);
 }

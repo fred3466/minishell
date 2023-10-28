@@ -1,28 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   factory.c                                          :+:      :+:    :+:   */
+/*   ft_calloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fbourgue <fbourgue@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/26 23:35:02 by fbourgue          #+#    #+#             */
-/*   Updated: 2023/10/26 23:36:22 by fbourgue         ###   ########.fr       */
+/*   Created: 2023/03/21 16:56:43 by fbourgue          #+#    #+#             */
+/*   Updated: 2023/03/31 17:04:24 by fbourgue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include <strings.h>
+#include <stdlib.h>
 
-t_tok	*tok_create(char *val, t_tok_type type)
+void	*ft_calloc(size_t nmemb, size_t size)
 {
-	t_tok	*tok;
+	unsigned char	*r;
+	size_t			sz;
+	size_t			i;
 
-	tok = (t_tok *)ft_calloc(1, sizeof(t_tok));
-	if (!tok)
+	sz = (nmemb * size * sizeof(unsigned char));
+	r = (unsigned char *)malloc(sz);
+	if (! r)
 		return (NULL);
-	tok->val = val;
-	tok->type = type;
-	tok->precedent = NULL;
-	tok->suivant = NULL;
-	tok->brulé = 0;
-	return (tok);
+	i = 0;
+	while (i < sz)
+	{
+		r[i++] = 0;
+	}
+	return (r);
 }
