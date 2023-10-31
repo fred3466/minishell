@@ -15,7 +15,7 @@ int	_interpret_ext(t_tok	*ct, char **sout, char **serr, char **env)
 //	if(res != -1)
 	if (exe_path != NULL)
 		res = run_exe(exe_path, args, env);
-	ct->brulé = 1;
+	ct->arg_utilisé = 1;
 	return (res);
 }
 
@@ -31,7 +31,7 @@ int	_interpret_bi(t_tok	*ct, char **sout, char **serr)
 	if (ft_strncmp(ct->val, "pwd", 2) ==0)
 		res = bi_pwd(ct, sout, serr);
 	if(res != -1)
-		ct->brulé = 1;
+		ct->arg_utilisé = 1;
 	return (res);
 }
 
@@ -46,7 +46,8 @@ int	interprete(t_tok	*ct, char **env)
 	sout = NULL;
 	serr = NULL;
 	res = -1;
-	if (ct->type == TOK_LIT && ct->brulé == 0)
+
+	if (ct->type == TOK_LIT && ct->arg_utilisé == 0)
 	{
 		res = _interpret_bi(ct, &sout, &serr);
 		if (res == -1)

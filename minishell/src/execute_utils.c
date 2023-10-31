@@ -59,16 +59,20 @@ char	**donne_moi_des_arguments(t_tok	*ct, int nb_requis)
 	}
 //	if (nb_requis !=-1 && nb_args > nb_requis)
 		//erreur trop d'arguments'
-	args = ft_calloc(nb_args + 2, sizeof(char **));
-	args[0] = ct->val;
-	args[nb_args] = NULL;
-	i = 0;
-	t = ct->suivant;
-	while(t && t->type == TOK_LIT)
+//	args = ft_calloc(nb_args + 2, sizeof(char **));
+	args = ft_calloc(nb_args + 1, sizeof(char **));
+	if (nb_args > 0)
 	{
-		args[++i] = t->val;
-		t->brulé = 1;
-		t = t->suivant;
+//		args[0] = ct->suivant->val;
+		args[nb_args] = NULL;
+		i = -1;
+		t = ct->suivant;
+		while(t && t->type == TOK_LIT)
+		{
+			args[++i] = t->val;
+			t->arg_utilisé = 1;
+			t = t->suivant;
+		}
 	}
 	return (args);
 }

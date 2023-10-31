@@ -39,7 +39,7 @@ typedef struct s_tok
 {
 	t_tok_type	type;
 	char	*val;
-	int brulé;
+	int arg_utilisé;
 	struct s_tok	*precedent;
 	struct s_tok	*suivant;
 }	t_tok;
@@ -47,20 +47,30 @@ typedef struct s_tok
 //deprecated
 typedef enum e_cmd_type
 {
-	BUILTIN, PIPE, OPERATEUR_BINAIRE, AND, OR
+	BUILTIN, PIPE, EXTERNE,
+	LITTERAL, INCONNU,
+	REDIR_OUT, REDIR_IN,
+	APPREND_OUT, APPEND_IN
 } t_cmd_type;
 
 typedef struct s_noeud
 {
 	t_cmd_type		cmd;
-	char			*str_valeur;
+	char					*str_valeur;
 	struct s_noeud	*noeud_gauche;
 	struct s_noeud	*noeud_droit;
+	char					**args;
+	struct s_noeud	*precedent;
+	struct s_noeud	*suivant;
+	char					*output;
+	char					*input;
+
 }	t_noeud;
 
 t_tok	*create_tok(char **val, t_tok *tok_last);
 
 t_tok	*tok_create(char *val, t_tok_type type);
+t_noeud	*noeud_create(t_tok *t);
 
 void	on_spaces(char **s);
 
