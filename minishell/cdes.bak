@@ -1,0 +1,15 @@
+ls
+cp toto_to_born toto 
+ls
+cat toto
+rm toto
+cat /etc/passwd|grep root
+ls|grep root>>t.txt
+cat t.txt
+ls|grep run|fgrep run|egrep run
+ls|rev
+ls -al -h|rev
+ls -al -h
+ls -alh|cat|rev|cat|rev
+rev </etc/passwd
+rev<<.

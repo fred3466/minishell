@@ -1,0 +1,1 @@
+ls|grep -o run.sh|fgrep -o run|egrep -o r

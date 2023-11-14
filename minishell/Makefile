@@ -1,8 +1,9 @@
 
 
 NAME = minishell
-SRCS =   main.c token.c factory.c builtin.c execute.c execute_utils.c
-	#pipe.c
+SRCS =   main.c token.c factory.c builtin.c execute.c execute_utils.c \
+	pipe.c debug.c clean.c
+	
 OBJS = $($(addprefix src/,${SRCS}):.c=.o)
 INC  = src/minishell.h /usr/include/readline/readline.h
 
@@ -13,7 +14,7 @@ LIBFT_OBJS = $(LIBFT_SRCS:.c=.o)
 
 CC = gcc
 CFLAGS =-g # -Wall -Wextra -Werror -g #-fsanitize=thread
-LFLAGS = 
+LFLAGS =-lreadline 
 
 RM = rm -rf
 

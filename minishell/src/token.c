@@ -19,26 +19,26 @@ char* _identify_separator(t_tok_type *type, char **val) {
 	if (ft_strncmp(*val, ">>", 2) == 0)
 	{
 		*type = TOK_DOUBLE_GRAND;
-		v = ">>";
+		v = ft_strdup(">>");
 		(**val)++;
 	}
 	else if (ft_strncmp(*val, "<<", 2) == 0)
 	{
 		*type = TOK_DOUBLE_PETIT;
-		v = "<<";
+		v = ft_strdup("<<");
 		(**val)++;
 	}
 	else if (**val == '>') {
 		*type = TOK_GRAND;
-		v = ">";
+		v = ft_strdup(">");
 	}
 	else if (**val == '<') {
 		*type = TOK_PETIT;
-		v = "<";
+		v = ft_strdup("<");
 	}
 	else if (**val == '|') {
 		*type = TOK_PIPE;
-		v = "|";
+		v = ft_strdup("|");
 	}
 	return v;
 }
@@ -53,7 +53,7 @@ t_tok	*create_tok(char **val, t_tok *tok_last)
 	v = _identify_separator(&type, val);
 	if (v != NULL)
 		(*val)++;
-	else
+	else if (*val)
 	{
 		type = TOK_LIT;
 		v = *val;
@@ -63,10 +63,10 @@ t_tok	*create_tok(char **val, t_tok *tok_last)
 	if (tok_last)
 		tok_last->suivant = tok;
 	tok->precedent = tok_last;
-	if (**val)
-	{
-		on_spaces(val);
-		tok->suivant = create_tok(val, tok);
-	}
+//	if (**val)
+//	{
+//		on_spaces(val);
+//		tok->suivant = create_tok(val, tok);
+//	}
 	return (tok);
 }

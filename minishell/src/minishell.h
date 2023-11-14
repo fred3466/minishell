@@ -23,16 +23,29 @@
 #include <sys/wait.h>
 #include <sys/stat.h>
 # include <pthread.h>
+#include <errno.h>
 
 #include "libft/libft.h"
 
-typedef enum e_tok_typetok
+# ifndef DEBUG_AST
+#  define DEBUG_AST 0
+# endif
+
+# ifndef DEBUG_PARSE
+#  define DEBUG_PARSE 0
+# endif
+
+# ifndef DEBUG_EXEC
+#  define DEBUG_EXEC 0
+# endif
+
+typedef enum e_tok_type
 {
+	INCONNU,
 	//TOK_VAR_NAME, TOK_VAR_VAL
-	TOK_PIPE,
+	TOK_PIPE, TOK_LIT,
 	TOK_GRAND, TOK_PETIT,
-	TOK_DOUBLE_GRAND, TOK_DOUBLE_PETIT,
-	TOK_LIT
+	TOK_DOUBLE_GRAND, TOK_DOUBLE_PETIT
 } t_tok_type;
 
 typedef struct s_tok
@@ -44,44 +57,68 @@ typedef struct s_tok
 	struct s_tok	*suivant;
 }	t_tok;
 
-//deprecated
-typedef enum e_cmd_type
+typedef enum e_node_type
 {
-	BUILTIN, PIPE, EXTERNE,
-	LITTERAL, INCONNU,
-	REDIR_OUT, REDIR_IN,
-	APPREND_OUT, APPEND_IN
-} t_cmd_type;
+	NODE_TYPE_INCONNU,
+	PIPE,
+	LITTERAL,
+	REDIRECTION,
+	HEREDOC
+} t_node_type;
+
+typedef struct s_pipe
+{
+	int	fds[2];
+	pid_t	pid_gauche;
+	pid_t	pid_droit;
+	int	res_gauche;
+	int	res_droit;
+} t_pipe;
 
 typedef struct s_noeud
 {
-	t_cmd_type		cmd;
+	t_node_type		type;
 	char					*str_valeur;
 	struct s_noeud	*noeud_gauche;
 	struct s_noeud	*noeud_droit;
 	char					**args;
 	struct s_noeud	*precedent;
 	struct s_noeud	*suivant;
-	char					*output;
-	char					*input;
+	int					fd_output;
+	int					fd_input;
+	char					*delim_heredoc;
+	int					fd_heredoc;
 
 }	t_noeud;
 
-t_tok	*create_tok(char **val, t_tok *tok_last);
+t_tok		*create_tok(char **val, t_tok *tok_last);
 
-t_tok	*tok_create(char *val, t_tok_type type);
-t_noeud	*noeud_create(t_tok *t);
+t_tok		*tok_create(char *val, t_tok_type type);
+t_noeud	*noeud_create(t_tok *t, t_noeud *rec);
 
-void	on_spaces(char **s);
+void			on_spaces(char **s);
+void	dbg_tab(char **t);
 
-int	interprete(t_tok	*ct, char **env);
-char	*find_exe(char *env_path, char *fname);
-int	run_exe(char *path, char *args[], char *const envp[]);
-char	**donne_moi_des_arguments(t_tok	*ct, int nb_requis);
+int			interprete(int piped, t_noeud *n, char **env);
+char			*find_exe(char *env_path, char *fname);
+int	run_exe(int piped, char *path, char *args[], char *const envp[]);
+char			**donne_moi_des_arguments(t_tok	*ct, int nb_requis);
+void			donne_moi_des_io(t_noeud *n, t_tok	*ct);
+void			pipe_show(int piped, t_pipe *pipe_ret, t_noeud	*n, char **env);
+void 		my_heredoc(t_noeud	*n);
+void	my_error(char *s);
 
-int	bi_ls(t_tok	*ct, char **sout, char **serr);
-int	bi_cd(t_tok *ct, char **sout, char **serr);
-int	bi_pwd(t_tok *ct, char **sout, char **serr);
+int			bi_cd(t_noeud *n);
+int			bi_pwd();
+
+void	dbg_tab(char **t );
+void	dbg_tree(t_noeud	*root, char* pre);
+void	debug_rebuild_cmdline(t_noeud *root);
+void	dbg_tok(t_tok	*tok_root);
+void	dbg_flat_AST(t_noeud	*root);
+
+void	kill_tok(t_tok *root);
+void	kill_AST(t_noeud *root);
 
 
 #endif
