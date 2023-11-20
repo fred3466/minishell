@@ -67,7 +67,7 @@ void	debug_rebuild_cmdline(t_noeud *root)
 	t_noeud *n;
 
 	n = root;
-	while(n->precedent)
+	while(n && n->precedent)
 		n = n->precedent;
 	while (n)
 	{
