@@ -64,6 +64,10 @@ int	_interpret_bi(t_noeud	*n, t_data *data)
 		res = bi_pwd();
 	else if (ft_strncmp(n->str_valeur, "export", ft_strlen(n->str_valeur)) ==0)
 		res = bi_export(n, data);
+	else if (ft_strncmp(n->str_valeur, "env", ft_strlen(n->str_valeur)) ==0)
+		res = bi_env(n, data);
+//	else if (ft_strncmp(n->str_valeur, "=", ft_strlen(n->str_valeur)) ==0)
+//		res = bi_equal(n, data);
 //	if(res != -1)
 //		ct->arg_utilisé = 1;
 	return (res);
@@ -102,6 +106,21 @@ int	interprete(int piped, t_noeud *n, t_data *data)
 			my_error("[interprete]");
 		}
 		// if (errno != 0)
+	}
+	else if (n->type == EQUAL)
+	{
+		if (DEBUG_EXEC)
+		{
+			dprintf(2,"\n***process EQUAL %s\n", n->str_valeur);
+			dprintf(2,"%s -> %s\n", n->noeud_droit->str_valeur, n->noeud_gauche->str_valeur);
+
+			int b_global = 0;
+			t_env 	*new_entry=lstnew_env(ft_strdup(n->noeud_gauche->str_valeur)
+					,ft_strdup( n->noeud_droit->str_valeur)
+					, b_global);
+			add_var_env(data->env_lst, new_entry);
+		}
+
 	}
 	else if (n->type == PIPE)
 	{

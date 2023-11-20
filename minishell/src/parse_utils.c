@@ -7,7 +7,7 @@ char	*_grab_to_sep(char **s)
 {
 	char	*sep;
 	char	*sep_min;
-	char	*seps=" |><\n";
+	char	*seps=" |><\n=";
 	char	**p_sep;
 	char	*r;
 
@@ -20,7 +20,7 @@ char	*_grab_to_sep(char **s)
 			sep_min = sep;
 		(*p_sep)++;
 	}
-	if (*sep_min == **s &&	(*sep_min == '|' || *sep_min == '>'||*sep_min == '<'))
+	if (*sep_min == **s &&	(*sep_min == '|' || *sep_min == '>'||*sep_min == '<'||*sep_min == '='))
 	{
 		if (*sep_min == *(*s+1))
 			sep_min+=2;

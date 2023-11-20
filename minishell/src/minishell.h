@@ -40,12 +40,12 @@
 # endif
 
 # ifndef DEBUG_CLEAN
-#  define DEBUG_CLEAN 1
+#  define DEBUG_CLEAN 0
 # endif
 
 typedef enum e_tok_type
 {
-	INCONNU,
+	INCONNU, TOK_EQUAL,
 	//TOK_VAR_NAME, TOK_VAR_VAL
 	TOK_PIPE, TOK_LIT,
 	TOK_GRAND, TOK_PETIT,
@@ -67,7 +67,8 @@ typedef enum e_node_type
 	PIPE,
 	LITTERAL,
 	REDIRECTION,
-	HEREDOC
+	HEREDOC,
+	EQUAL
 } t_node_type;
 
 typedef struct s_pipe
@@ -95,17 +96,18 @@ typedef struct s_noeud
 	char					*delim_heredoc;
 }	t_noeud;
 
-typedef struct s_env_var
-{
-	char 		*name;
-	char 		*value;
-	struct s_env_var *next;
-}			t_env_var;
+//typedef struct s_env_var
+//{
+//	char 		*name;
+//	char 		*value;
+//	struct s_env_var *next;
+//}			t_env;
 
 typedef struct s_env
 {
 	char *name;
 	char *value;
+	int		b_global;
 	struct s_env *next;
 }			t_env;
 
@@ -141,6 +143,7 @@ void	my_error(char *s);
 int			bi_cd(t_noeud *n);
 int			bi_pwd();
 int bi_export(t_noeud *n, t_data *data);
+int bi_env(t_noeud *n, t_data *data);
 
 void	dbg_tab(char **t );
 void	dbg_tree(t_noeud	*root, char* pre);
@@ -153,16 +156,14 @@ void	kill_AST(t_noeud *root);
 void	sortir_propre(t_noeud	*noeud_root, int exit_code);
 
 void	ft_free(char **str);
-void ft_free_lstvar(t_env_var *lst);
 void ft_free_lstenv(t_env *lst);
 void ft_free_cell(t_env *lst);
 
-t_env *add_var_env(t_env *env_lst, t_env_var *var);
-t_env *remove_var_env(t_env *env_lst, t_env_var *var);
+t_env *add_var_env(t_env *env_lst, t_env *var);
+t_env *remove_var_env(t_env *env_lst, t_env *var);
 t_env	*ft_lstlast(t_env *lst);
 void	ft_lstadd_back(t_env **lst, t_env *new);
-t_env *lstnew_env(char *name, char *value);
-t_env_var *lstnew_var(char *name, char *value);
+t_env *lstnew_env(char *name, char *value, int b_global);
 void print_env_lst(t_env *env_lst);
 
 char *get_value(char *str);

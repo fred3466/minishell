@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-t_env *add_var_env(t_env *env_lst, t_env_var *var)
+t_env *add_var_env(t_env *env_lst, t_env *var)
 {
 	t_env *head;
 	t_env *new;
@@ -27,13 +27,13 @@ t_env *add_var_env(t_env *env_lst, t_env_var *var)
 		}
 		env_lst = env_lst->next;
 	}
-	new = lstnew_env(ft_strdup(var->name), ft_strdup(var->value));
+	new = lstnew_env(ft_strdup(var->name), ft_strdup(var->value), var->b_global);
 	ft_lstadd_back(&head, new);
 	env_lst = head;
 	return (env_lst);
 }
 
-t_env *remove_var_env(t_env *env_lst, t_env_var *var)
+t_env *remove_var_env(t_env *env_lst, t_env *var)
 {
 	t_env *head;
 	t_env *prev;
@@ -63,39 +63,46 @@ t_env *init_env(char **env)
 {
 	t_env *new;
 	t_env *env_lst;
-	int i;
+	int			b_global;
+	int 			i;
 
+	b_global = 1;
 	i = -1;
 	env_lst = NULL;
 	while (env[++i])
 	{
-		new = lstnew_env(get_name(env[i]), get_value(env[i]));
+		new = lstnew_env(get_name(env[i]), get_value(env[i]), b_global);
 		ft_lstadd_back(&env_lst, new);
 	}
 	return (env_lst);
 }
 
-char	*apply_string_env(const char *str1, const char *str2)
+char	*apply_string_env(const char *str_name, const char *str_val)
 {
 	size_t	i;
 	char	*dest;
 
 	i = 0;
-	dest = (char *)malloc(sizeof(char) * (ft_strlen(str1)
-				+ ft_strlen(str2) + 2));
+	dest = (char *)malloc(sizeof(char) * (ft_strlen(str_name)
+				+ ft_strlen(str_val) + 2));
 	if (!dest)
 		return (NULL);
-	while (*str1)
+	while (*str_name)
 	{
-		dest[i] = *str1;
-		str1++;
+		dest[i] = *str_name;
+		str_name++;
 		i++;
 	}
 	dest[i++] = '=';
-	while (*str2)
+	if (! str_val)
 	{
-		dest[i] = *str2;
-		str2++;
+		dest[i] = '\0';
+		return (dest);
+	}
+	while (*str_val)
+	{
+		dest[i] = *str_val;
+		str_val++;
 		i++;
 	}
 	dest[i] = '\0';

@@ -39,6 +39,8 @@ t_node_type	_from_tok_type_to_cmd_type(t_tok_type t_type)
 		return(REDIRECTION);
 	else if (t_type == TOK_DOUBLE_PETIT)
 		return(HEREDOC);
+	else if (t_type == TOK_EQUAL)
+		return(EQUAL);
 	else if (t_type == TOK_LIT)
 	{
 		return(LITTERAL);

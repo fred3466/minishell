@@ -28,15 +28,23 @@ char* _identify_separator(t_tok_type *type, char **val) {
 		v = ("<<");
 		(**val)++;
 	}
-	else if (**val == '>') {
+	else if (**val == '>')
+	{
 		*type = TOK_GRAND;
 		v = (">");
 	}
-	else if (**val == '<') {
+	else if (**val == '<')
+	{
 		*type = TOK_PETIT;
 		v = ("<");
 	}
-	else if (**val == '|') {
+	else if (**val == '=')
+	{
+		*type = TOK_EQUAL;
+		v = ("=");
+	}
+	else if (**val == '|')
+	{
 		*type = TOK_PIPE;
 		v = ("|");
 	}

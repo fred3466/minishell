@@ -21,10 +21,10 @@ void	ft_free(char **str)
 	free(str);
 }
 
-void ft_free_lstvar(t_env_var *lst)
+void ft_free_lstvar(t_env *lst)
 {
-	t_env_var *cur;
-	t_env_var *next;
+	t_env *cur;
+	t_env *next;
 
 	cur = lst;
 	while (cur)

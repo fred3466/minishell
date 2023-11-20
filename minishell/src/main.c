@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: slecoq <slecoq@student.42perpignan.fr>     +#+  +:+       +#+        */
+/*   By: fbourgue <fbourgue@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 23:09:47 by fbourgue          #+#    #+#             */
-/*   Updated: 2023/11/20 13:59:16 by slecoq           ###   ########.fr       */
+/*   Updated: 2023/11/20 18:19:51 by fbourgue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,11 +79,22 @@ t_noeud	*create_AST(t_tok *tok_root)
 		n = noeud_create(t, prec);
 		if (root == NULL)
 			root = n;
-		if (prec &&
-				(prec->type == PIPE /*|| prec->cmd == REDIR_OUT*/)
-				)
+		if (prec && prec->type == PIPE)
 		{
+			pipe = prec;
+			pipe->noeud_gauche = pipe->precedent;
+			pipe->noeud_droit = n;
 
+			if (root->type != PIPE)
+				root = pipe;
+			else
+			{
+				pipe->noeud_gauche = root;
+				root = pipe;
+			}
+		}
+		else if (prec && prec->type == EQUAL)
+		{
 			pipe = prec;
 			pipe->noeud_gauche = pipe->precedent;
 			pipe->noeud_droit = n;
