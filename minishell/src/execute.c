@@ -62,8 +62,8 @@ int	_interpret_bi(t_noeud	*n, t_data *data)
 		res = bi_cd(n);
 	else if (ft_strncmp(n->str_valeur, "pwd", ft_strlen(n->str_valeur)) ==0)
 		res = bi_pwd();
-	// else if (ft_strncmp(n->str_valeur, "export", ft_strlen(n->str_valeur)) ==0)
-	// 	res = bi_export(n, data);
+	else if (ft_strncmp(n->str_valeur, "export", ft_strlen(n->str_valeur)) ==0)
+		res = bi_export(n, data);
 //	if(res != -1)
 //		ct->arg_utilisé = 1;
 	return (res);
