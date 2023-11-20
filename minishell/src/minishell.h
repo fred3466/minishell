@@ -28,15 +28,15 @@
 #include "libft/libft.h"
 
 # ifndef DEBUG_AST
-#  define DEBUG_AST 0
+#  define DEBUG_AST 1
 # endif
 
 # ifndef DEBUG_PARSE
-#  define DEBUG_PARSE 0
+#  define DEBUG_PARSE 1
 # endif
 
 # ifndef DEBUG_EXEC
-#  define DEBUG_EXEC 0
+#  define DEBUG_EXEC 1
 # endif
 
 # ifndef DEBUG_CLEAN

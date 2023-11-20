@@ -60,11 +60,6 @@ t_tok	*parse(char *s_init)
 
 void	_ast_pipe(t_noeud *n)
 {
-	t_noeud	*pipe;
-
-	pipe = prec;
-	pipe->noeud_gauche = pipe->precedent;
-	pipe->noeud_droit = n;
 
 }
 
@@ -88,8 +83,10 @@ t_noeud	*create_AST(t_tok *tok_root)
 				(prec->type == PIPE /*|| prec->cmd == REDIR_OUT*/)
 				)
 		{
-			_ast_pipe();
 
+			pipe = prec;
+			pipe->noeud_gauche = pipe->precedent;
+			pipe->noeud_droit = n;
 
 			if (root->type != PIPE)
 				root = pipe;
