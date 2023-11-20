@@ -45,6 +45,11 @@ char	*find_exe(char *env_path, char *fname)
 	int	status;
 	char	*cur_env_path;
 
+	if (access(fname, F_OK) == 0)
+	{
+		errno = 0;
+		return (ft_strdup(fname));
+	}
 	env_path_expl = ft_split(env_path, ':');
 	i = -1;
 	path = NULL;
