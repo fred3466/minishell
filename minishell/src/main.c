@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbourgue <fbourgue@student.42.fr>          +#+  +:+       +#+        */
+/*   By: slecoq <slecoq@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 23:09:47 by fbourgue          #+#    #+#             */
-/*   Updated: 2023/11/17 14:39:31 by fbourgue         ###   ########.fr       */
+/*   Updated: 2023/11/20 13:59:16 by slecoq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,7 @@ int	main(int ac, char **av, char **env)
 {
 	t_tok		*tok_root;
 	t_noeud	*noeud_root;
+	t_data data;
 
 //	char	**	tab_cmdline;
 	char	*line;
@@ -141,6 +142,9 @@ int	main(int ac, char **av, char **env)
 	save_in = dup(0);
 	save_out = dup(1);
 //		}
+	ft_memset(&data, 0, sizeof(t_data));
+	data.env_lst = init_env(env);
+	data.env = new_env(data.env_lst);
 	while(line)
 	{
 		printf("\n----------------------------------------\n%s\n",line);
@@ -157,7 +161,7 @@ int	main(int ac, char **av, char **env)
 		debug_rebuild_cmdline(noeud_root);
 		dup2(1, save_out);
 		dup2(0, save_in);
-		interprete(0, noeud_root, env);
+		interprete(0, noeud_root, &data);
 		// if (line_copy)
 		// 	free (line_copy);
 //			 if (ft_strlen(line) >= 0)

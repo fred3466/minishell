@@ -18,3 +18,8 @@ int bi_pwd()
 	free(sout);
 	return 0;
 }
+
+int bi_export(t_noeud *n, t_data *data)
+{
+	
+}
