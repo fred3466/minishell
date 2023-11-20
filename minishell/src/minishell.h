@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbourgue <fbourgue@student.42.fr>          +#+  +:+       +#+        */
+/*   By: slecoq <slecoq@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 23:35:44 by fbourgue          #+#    #+#             */
-/*   Updated: 2023/10/26 23:36:09 by fbourgue         ###   ########.fr       */
+/*   Updated: 2023/11/20 14:13:07 by slecoq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,30 @@ typedef struct s_noeud
 	char					*delim_heredoc;
 }	t_noeud;
 
+typedef struct s_env_var
+{
+	char 		*name;
+	char 		*value;
+	struct s_env_var *next;
+}			t_env_var;
+
+typedef struct s_env
+{
+	char *name;
+	char *value;
+	struct s_env *next;
+}			t_env;
+
+typedef struct s_data
+{
+	char 		**env;
+	char **cmd;
+	struct s_arg *arg;
+	struct s_env *env_lst;
+	struct s_env_var *var;
+	int pid;
+}				t_data;
+
 char	*grab(char **s);
 char	**quotes(char **s);
 t_tok		*create_tok(char **val, t_tok *tok_last);
@@ -104,12 +128,13 @@ t_noeud	*noeud_create(t_tok *t, t_noeud *rec);
 
 void	dbg_tab(char **t);
 
-int			interprete(int piped, t_noeud *n, char **env);
+int	interprete(int piped, t_noeud *n, t_data *data);
+int	_interpret_bi(t_noeud	*n, t_data *data);
 char			*find_exe(char *env_path, char *fname);
 int	run_exe(int piped, char *path, char *args[], char *const envp[]);
 char			**donne_moi_des_arguments(t_tok	*ct, int nb_requis);
 void			donne_moi_des_io(t_noeud *n, t_tok	*ct);
-void			pipe_show(int piped, t_pipe *pipe_ret, t_noeud	*n, char **env);
+void pipe_show(int piped,t_pipe	*pipe_ret, t_noeud	*n, t_data *data);
 void 		my_heredoc(t_noeud	*n);
 void	my_error(char *s);
 
@@ -126,5 +151,28 @@ void	kill_tok(t_tok *root);
 void	kill_AST(t_noeud *root);
 void	sortir_propre(t_noeud	*noeud_root, int exit_code);
 
+void	ft_free(char **str);
+void ft_free_lstvar(t_env_var *lst);
+void ft_free_lstenv(t_env *lst);
+void ft_free_cell(t_env *lst);
+
+t_env *add_var_env(t_env *env_lst, t_env_var *var);
+t_env *remove_var_env(t_env *env_lst, t_env_var *var);
+t_env	*ft_lstlast(t_env *lst);
+void	ft_lstadd_back(t_env **lst, t_env *new);
+t_env *lstnew_env(char *name, char *value);
+t_env_var *lstnew_var(char *name, char *value);
+void print_env_lst(t_env *env_lst);
+
+char *get_value(char *str);
+char *get_name(char *str);
+
+int	ft_array_len(char **array);
+char *swap_value(char *old, char *new);
+
+t_env *init_env(char **env);
+char **new_env(t_env *env_lst);
+char	*apply_string_env(const char *str1, const char *str2);
+int lst_size(t_env *env_lst);
 
 #endif

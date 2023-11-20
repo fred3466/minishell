@@ -51,7 +51,7 @@ int	_interpret_ext(int piped, t_noeud	*n, char **env)
 	return (res);
 }
 
-int	_interpret_bi(t_noeud	*n)
+int	_interpret_bi(t_noeud	*n, t_data *data)
 {
 	int	res;
 
@@ -60,8 +60,10 @@ int	_interpret_bi(t_noeud	*n)
 //		res = bi_ls(n, sout, serr);
 	if (ft_strncmp(n->str_valeur, "cd", ft_strlen(n->str_valeur)) ==0)
 		res = bi_cd(n);
-	if (ft_strncmp(n->str_valeur, "pwd", ft_strlen(n->str_valeur)) ==0)
+	else if (ft_strncmp(n->str_valeur, "pwd", ft_strlen(n->str_valeur)) ==0)
 		res = bi_pwd();
+	// else if (ft_strncmp(n->str_valeur, "export", ft_strlen(n->str_valeur)) ==0)
+	// 	res = bi_export(n, data);
 //	if(res != -1)
 //		ct->arg_utilisé = 1;
 	return (res);
@@ -74,7 +76,7 @@ int	_interpret_bi(t_noeud	*n)
 //	dup2(g_minishell.stdin, 0);
 //	dup2(g_minishell.stdout, 1);
 //}
-int	interprete(int piped, t_noeud *n, char **env)
+int	interprete(int piped, t_noeud *n, t_data *data)
 {
 	int		res;
 	t_pipe	*pipe_ret;
@@ -86,12 +88,12 @@ int	interprete(int piped, t_noeud *n, char **env)
 	if (n->type == LITTERAL)
 	{
 //		dprintf(2, "\n***process LITTERAL %s\n", n->str_valeur);
-		res = _interpret_bi(n);
+		res = _interpret_bi(n, data);
 		if (res == 1)
 		{
 			if (DEBUG_EXEC)
 				dprintf(2, "\t\tDEB process EXTERNE %s\n", n->str_valeur);
-			res = _interpret_ext(piped, n, env);
+			res = _interpret_ext(piped, n, data->env);
 			if (DEBUG_EXEC)
 				dprintf(2, "\t\tFIN process EXTERNE %s\n", n->str_valeur);
 		}
@@ -112,7 +114,7 @@ int	interprete(int piped, t_noeud *n, char **env)
 //		{
 //			pipe_show(piped, n->noeud_gauche, env, 1);
 //		}
-		pipe_show(piped, pipe_ret, n, env);
+		pipe_show(piped, pipe_ret, n, data);
 		if (DEBUG_EXEC)
 		{
 			dprintf(2, "***FIN process PIPE %s\n", n->str_valeur);
