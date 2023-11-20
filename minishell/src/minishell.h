@@ -6,7 +6,7 @@
 /*   By: slecoq <slecoq@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 23:35:44 by fbourgue          #+#    #+#             */
-/*   Updated: 2023/11/20 14:13:07 by slecoq           ###   ########.fr       */
+/*   Updated: 2023/11/20 14:28:22 by slecoq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,19 +28,19 @@
 #include "libft/libft.h"
 
 # ifndef DEBUG_AST
-#  define DEBUG_AST 0
+#  define DEBUG_AST 1
 # endif
 
 # ifndef DEBUG_PARSE
-#  define DEBUG_PARSE 0
+#  define DEBUG_PARSE 1
 # endif
 
 # ifndef DEBUG_EXEC
-#  define DEBUG_EXEC 0
+#  define DEBUG_EXEC 1
 # endif
 
 # ifndef DEBUG_CLEAN
-#  define DEBUG_CLEAN 0
+#  define DEBUG_CLEAN 1
 # endif
 
 typedef enum e_tok_type
@@ -140,6 +140,7 @@ void	my_error(char *s);
 
 int			bi_cd(t_noeud *n);
 int			bi_pwd();
+int bi_export(t_noeud *n, t_data *data);
 
 void	dbg_tab(char **t );
 void	dbg_tree(t_noeud	*root, char* pre);
