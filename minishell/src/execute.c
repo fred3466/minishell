@@ -35,9 +35,12 @@ int	_interpret_ext(int piped, t_noeud	*n, char **env)
 			my_heredoc(n);
 			dup2(n->fd_input, STDIN_FILENO);
 			close(n->fd_input);
-			piped = 1;
 		}
 
+//		char *a=(ft_strdup(*args));
+//		char *p=(ft_strdup(exe_path));
+//		kill_tok(n->tok);
+//		kill_AST(n);
 		res = run_exe(piped, exe_path, args, env);
 		my_error("_interpret_ext");
 		// free (exe_path);
@@ -52,7 +55,7 @@ int	_interpret_bi(t_noeud	*n)
 {
 	int	res;
 
-	res = -1;
+	res = 1;
 //	if (ft_strncmp(n->str_valeur, "toto", 2) ==0)
 //		res = bi_ls(n, sout, serr);
 	if (ft_strncmp(n->str_valeur, "cd", ft_strlen(n->str_valeur)) ==0)
@@ -64,6 +67,13 @@ int	_interpret_bi(t_noeud	*n)
 	return (res);
 }
 
+//void	ft_reset_stds(bool piped)
+//{
+//	if (piped)
+//		return ;
+//	dup2(g_minishell.stdin, 0);
+//	dup2(g_minishell.stdout, 1);
+//}
 int	interprete(int piped, t_noeud *n, char **env)
 {
 	int		res;
@@ -77,17 +87,17 @@ int	interprete(int piped, t_noeud *n, char **env)
 	{
 //		dprintf(2, "\n***process LITTERAL %s\n", n->str_valeur);
 		res = _interpret_bi(n);
-		if (res == -1)
+		if (res == 1)
 		{
 			if (DEBUG_EXEC)
 				dprintf(2, "\t\tDEB process EXTERNE %s\n", n->str_valeur);
 			res = _interpret_ext(piped, n, env);
 			if (DEBUG_EXEC)
 				dprintf(2, "\t\tFIN process EXTERNE %s\n", n->str_valeur);
-			if (res == -1)
-			{
-				my_error("[interprete]");
-			}
+		}
+		if (res == -1)
+		{
+			my_error("[interprete]");
 		}
 		// if (errno != 0)
 	}
@@ -96,17 +106,19 @@ int	interprete(int piped, t_noeud *n, char **env)
 		if (DEBUG_EXEC)
 			dprintf(2,"\n***process PIPE %s\n", n->str_valeur);
 		pipe_ret = malloc(sizeof(t_pipe));
+		pipe_ret->res_gauche = 0;
+		pipe_ret->res_droit = 0;
 //		while (n->noeud_gauche && n->noeud_gauche->type == PIPE)
 //		{
 //			pipe_show(piped, n->noeud_gauche, env, 1);
 //		}
 		pipe_show(piped, pipe_ret, n, env);
-		free(pipe_ret);
 		if (DEBUG_EXEC)
 		{
 			dprintf(2, "***FIN process PIPE %s\n", n->str_valeur);
 			dprintf(2,"Retour de pipe : %d et %d\n", pipe_ret->res_gauche,pipe_ret->res_droit);
 		}
+		free(pipe_ret);
 
 		if (res == -1)
 		{

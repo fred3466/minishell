@@ -19,26 +19,26 @@ char* _identify_separator(t_tok_type *type, char **val) {
 	if (ft_strncmp(*val, ">>", 2) == 0)
 	{
 		*type = TOK_DOUBLE_GRAND;
-		v = ft_strdup(">>");
+		v = (">>");
 		(**val)++;
 	}
 	else if (ft_strncmp(*val, "<<", 2) == 0)
 	{
 		*type = TOK_DOUBLE_PETIT;
-		v = ft_strdup("<<");
+		v = ("<<");
 		(**val)++;
 	}
 	else if (**val == '>') {
 		*type = TOK_GRAND;
-		v = ft_strdup(">");
+		v = (">");
 	}
 	else if (**val == '<') {
 		*type = TOK_PETIT;
-		v = ft_strdup("<");
+		v = ("<");
 	}
 	else if (**val == '|') {
 		*type = TOK_PIPE;
-		v = ft_strdup("|");
+		v = ("|");
 	}
 	return v;
 }

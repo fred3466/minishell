@@ -1,1 +1,3 @@
-ls|grep -o run.sh|fgrep -o run|egrep -o r
+rev<<.
+cat t.txt
+ls|grep run|fgrep run|egrep run

@@ -39,6 +39,10 @@
 #  define DEBUG_EXEC 0
 # endif
 
+# ifndef DEBUG_CLEAN
+#  define DEBUG_CLEAN 0
+# endif
+
 typedef enum e_tok_type
 {
 	INCONNU,
@@ -77,6 +81,7 @@ typedef struct s_pipe
 
 typedef struct s_noeud
 {
+	t_tok				*tok;
 	t_node_type		type;
 	char					*str_valeur;
 	struct s_noeud	*noeud_gauche;
@@ -85,18 +90,18 @@ typedef struct s_noeud
 	struct s_noeud	*precedent;
 	struct s_noeud	*suivant;
 	int					fd_output;
-	int					fd_input;
+	int						fd_input;
+//	int					fd_heredoc;
 	char					*delim_heredoc;
-	int					fd_heredoc;
-
 }	t_noeud;
 
+char	*grab(char **s);
+char	**quotes(char **s);
 t_tok		*create_tok(char **val, t_tok *tok_last);
 
 t_tok		*tok_create(char *val, t_tok_type type);
 t_noeud	*noeud_create(t_tok *t, t_noeud *rec);
 
-void			on_spaces(char **s);
 void	dbg_tab(char **t);
 
 int			interprete(int piped, t_noeud *n, char **env);
@@ -119,6 +124,7 @@ void	dbg_flat_AST(t_noeud	*root);
 
 void	kill_tok(t_tok *root);
 void	kill_AST(t_noeud *root);
+void	sortir_propre(t_noeud	*noeud_root, int exit_code);
 
 
 #endif

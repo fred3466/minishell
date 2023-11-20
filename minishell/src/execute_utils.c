@@ -7,7 +7,7 @@ int	run_exe(int piped, char *path, char *args[], char *const envp[])
 	char	***p_args;
 	int		res;
 
-	res = -1;
+	res = 0;
 	if (! piped)
 	{
 		pid = fork();
@@ -24,7 +24,7 @@ int	run_exe(int piped, char *path, char *args[], char *const envp[])
 	else
 	{
 		res = execve(path, args, envp);
-		my_error("execve");
+		my_error("piped execve");
 	}
 	free(path);
 	p_args = &args;
@@ -69,6 +69,7 @@ char	*find_exe(char *env_path, char *fname)
 					free(env_path_expl[i]);
 				free(env_path_expl[i]);
 				free(env_path_expl);
+				errno = 0;
 				return (path);
 		}
 		free (path);

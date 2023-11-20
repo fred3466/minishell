@@ -1,29 +1,38 @@
 #include "minishell.h"
 
 
-void	kill_tok(t_tok *root)
+void	kill_tok(t_tok *tok_depart)
 {
 	t_tok	*t;
 
-	t = root;
+	t = tok_depart;
+	if (!t)
+		return ;
 	while (t && t->suivant)
 		t = t->suivant;;
-	while (t && t->precedent)
+	while (t)
 	{
-		if (t && t->suivant)
+		if (t->suivant)
 		{
-//			dprintf(2, "killing %s\n", t->suivant->val);
+			if (DEBUG_CLEAN)
+					dprintf(2, "TOK killing %s\n", t->suivant->val);
 			if (t->suivant->val)
 				free(t->suivant->val);
 			free(t->suivant);
 			t->suivant = NULL;
 		}
-		t = t->precedent;
+		if (t->precedent)
+			t = t->precedent;
+		else
+			break ;
 	}
-//	dprintf(2, "killing %s\n", t->val);
-	if (t->val)
+	if (DEBUG_CLEAN)
+		dprintf(2, "-TOK killing %s\n", t->val);
+	if (t && t->val)
 		free(t->val);
-	free(t);
+//	if (t)
+		free(t);
+		t = NULL;
 }
 
 void	kill_args(char	 **args)
@@ -39,27 +48,47 @@ void	kill_args(char	 **args)
 	free(args_save);
 }
 
-void	kill_AST(t_noeud *root)
+void	kill_AST(t_noeud *noeud_depart)
 {
 	t_noeud	*t;
 
-	t = root;
+	t = noeud_depart;
+	if (!t)
+		return ;
 	while (t->suivant)
 		t = t->suivant;
-	while (t && t->precedent)
+	while (t)
 	{
-		if (t && t->suivant)
+		if (t->suivant)
 		{
-//			dprintf(2, "killing %s\n", t->suivant->str_valeur);
+			if (DEBUG_CLEAN)
+					dprintf(2, "killing %s\n", t->suivant->str_valeur);
 			kill_args(t->suivant->args);
+			if (t->suivant->fd_input)
+				close (t->suivant->fd_input);
+			if (t->suivant->fd_output)
+				close (t->suivant->fd_output);
 			free(t->suivant->str_valeur);
 			free(t->suivant);
 			t->suivant = NULL;
 		}
-		t = t->precedent;
+		if (t->precedent)
+			t= t->precedent;
+		else
+			break ;
 	}
-//	dprintf(2, "killing %s\n", t->str_valeur);
+	if (DEBUG_CLEAN)
+			dprintf(2, "-killing %s\n", t->str_valeur);
 	kill_args(t->args);
 	free(t->str_valeur);
 	free(t);
+}
+
+void	sortir_propre(t_noeud	*noeud_depart, int exit_code)
+{
+	if (DEBUG_CLEAN)
+				dprintf(2, "sortir_propre : t=%s n=%s\n", noeud_depart->tok->val, noeud_depart->str_valeur);
+	kill_tok(noeud_depart->tok);
+	kill_AST(noeud_depart);
+	exit(exit_code);
 }

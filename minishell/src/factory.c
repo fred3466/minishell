@@ -19,7 +19,7 @@ t_tok	*tok_create(char *val, t_tok_type type)
 	tok = (t_tok *)ft_calloc(1, sizeof(t_tok));
 	if (!tok)
 		return (NULL);
-	tok->val = val;
+	tok->val = ft_strdup(val);
 	tok->type = type;
 	tok->precedent = NULL;
 	tok->suivant = NULL;
@@ -57,10 +57,11 @@ t_noeud	*noeud_create(t_tok *t, t_noeud *prec)
 	n->type = _from_tok_type_to_cmd_type(t->type);
 	n->precedent = prec;
 	n->delim_heredoc = NULL;
-	n->fd_heredoc = 0;
+//	n->fd_heredoc = 0;
 	n->fd_input = 0;
 	n->fd_output = 0;
 	n->str_valeur = ft_strdup(t->val);
+	n->tok = t;
 	if (t->type == TOK_LIT)
 		n->args = donne_moi_des_arguments(t, -1);
 	if (n->type == REDIRECTION || n->type == HEREDOC)
