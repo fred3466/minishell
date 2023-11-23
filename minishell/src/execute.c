@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int	_interpret_ext(int piped, t_noeud	*n, char **env)
+int	_interpret_ext(int piped, t_noeud	*n, t_data *data)
 {
 	int	res;
 	char	*exe_path;
@@ -32,7 +32,7 @@ int	_interpret_ext(int piped, t_noeud	*n, char **env)
 		}
 		if (n->delim_heredoc)
 		{
-			my_heredoc(n);
+			my_heredoc(n, data);
 			dup2(n->fd_input, STDIN_FILENO);
 			close(n->fd_input);
 		}
@@ -41,7 +41,7 @@ int	_interpret_ext(int piped, t_noeud	*n, char **env)
 //		char *p=(ft_strdup(exe_path));
 //		kill_tok(n->tok);
 //		kill_AST(n);
-		res = run_exe(piped, exe_path, args, env);
+		res = run_exe(piped, exe_path, args, data);
 		my_error("_interpret_ext");
 		// free (exe_path);
 	}
@@ -62,8 +62,6 @@ int	_interpret_bi(t_noeud	*n, t_data *data)
 		res = bi_cd(n);
 	else if (ft_strncmp(n->str_valeur, "pwd", ft_strlen(n->str_valeur)) ==0)
 		res = bi_pwd();
-	else if (ft_strncmp(n->str_valeur, "export", ft_strlen(n->str_valeur)) ==0)
-		res = bi_export(n, data);
 	else if (ft_strncmp(n->str_valeur, "env", ft_strlen(n->str_valeur)) ==0)
 		res = bi_env(n, data);
 //	else if (ft_strncmp(n->str_valeur, "=", ft_strlen(n->str_valeur)) ==0)
@@ -98,7 +96,7 @@ int	interprete(int piped, t_noeud *n, t_data *data)
 		{
 			if (DEBUG_EXEC)
 				dprintf(2, "\t\tDEB process EXTERNE %s\n", n->str_valeur);
-			res = _interpret_ext(piped, n, data->env);
+			res = _interpret_ext(piped, n, data);
 			if (DEBUG_EXEC)
 				dprintf(2, "\t\tFIN process EXTERNE %s\n", n->str_valeur);
 		}

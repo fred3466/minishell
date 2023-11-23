@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbourgue <fbourgue@student.42.fr>          +#+  +:+       +#+        */
+/*   By: slecoq <slecoq@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 23:09:47 by fbourgue          #+#    #+#             */
-/*   Updated: 2023/11/20 18:19:51 by fbourgue         ###   ########.fr       */
+/*   Updated: 2023/11/23 13:24:39 by slecoq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,79 +123,41 @@ int	main(int ac, char **av, char **env)
 	t_noeud	*noeud_root;
 	t_data data;
 
-//	char	**	tab_cmdline;
 	char	*line;
 	char	*line_copy;
-	int	fd;
 	int save_in;
 	int	save_out;
 	int	i;
 
-	fd = -1;
 	line = NULL;
-	if (ac == 2)
-	{
-		fd = open(av[1], O_RDONLY);
-	}
-
-	if(fd!=-1)
-	{
-		line = get_next_line(fd);
-	}
-//	else{
-//		 i = 1;
-//		 line = tab_cmdline[i];
-//	}
-//	save_in = 0;
-//	save_out = 1;
-//		if (!save_out)
-//		{
+	if (ac >= 2)
+		return (ft_printf("Aucun argument n'est necessaire pour lancer minishell\n"), 0);
 	save_in = dup(0);
 	save_out = dup(1);
-//		}
 	ft_memset(&data, 0, sizeof(t_data));
 	data.env_lst = init_env(env);
 	data.env = new_env(data.env_lst);
-	while(line)
+	while(1)
 	{
-		if (DEBUG_EXEC)
-			printf("\n----------------------------------------\n%s\n",line);
-//		line_copy = ft_strdup(line);
+		line = readline("$>");
+		if (!line)
+			break ;
 		tok_root = parse(line);
-		if (DEBUG_PARSE)
-			dbg_tok(tok_root);
+		free(line);
 		noeud_root = create_AST(tok_root);
 		if (DEBUG_AST)
 		{
 			dbg_tree(noeud_root,"");
 			dbg_flat_AST(noeud_root);
 		}
-		debug_rebuild_cmdline(noeud_root);
 		dup2(1, save_out);
 		dup2(0, save_in);
 		interprete(0, noeud_root, &data);
-		// if (line_copy)
-		// 	free (line_copy);
-//			 if (ft_strlen(line) >= 0)
 		kill_tok(tok_root);
 		kill_AST(noeud_root);
-		free(line);
-		line = get_next_line(fd);
-//		if (!line)
-//		{
-//		free(line);
-//		break ;
-//		}
-		// perror("");
 		dup2(save_out, 1);
 		dup2(save_in, 0);
-
-		my_error("main ");
-		 errno = 0;
 	}
 	ft_free_lstenv(data.env_lst);
 	ft_free(data.env);
-	//////////////
-	if(fd!=-1)
-		close(fd);
 }

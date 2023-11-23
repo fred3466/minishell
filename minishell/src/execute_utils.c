@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int	run_exe(int piped, char *path, char *args[], char *const envp[])
+int	run_exe(int piped, char *path, char *args[], t_data *data)
 {
 	pid_t	pid;
 	int	status;
@@ -13,17 +13,17 @@ int	run_exe(int piped, char *path, char *args[], char *const envp[])
 		pid = fork();
 		if (pid == 0)
 		{
-			res = execve(path, args, envp);
+			res = execve(path, args, data->env);
 			my_error("execve");
 		}
 		else
 		{
-			waitpid(pid, &status, 0);
+			waitpid(pid, &(data->status), 0);
 		}
 	}
 	else
 	{
-		res = execve(path, args, envp);
+		res = execve(path, args, data->env);
 		my_error("piped execve");
 	}
 	free(path);
