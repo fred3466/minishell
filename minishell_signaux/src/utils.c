@@ -1,46 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free.c                                             :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: slecoq <slecoq@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/26 13:50:55 by slecoq            #+#    #+#             */
-/*   Updated: 2023/11/22 14:28:19 by slecoq           ###   ########.fr       */
+/*   Created: 2023/10/26 13:56:58 by slecoq            #+#    #+#             */
+/*   Updated: 2023/10/26 13:57:22 by slecoq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../include/minishell.h"
 
-void	ft_free(char **str)
+int	ft_array_len(char **array)
 {
-	int	i;
+	int i;
 
-	i = -1;
-	while (str[++i])
-		free(str[i]);
-	free(str);
+	i = 0;
+	while (array[i])
+		i++;
+	return(i);
 }
 
-void	ft_free_lstenv(t_env *lst)
+char *swap_value(char *old, char *new)
 {
-	t_env	*cur;
-	t_env	*next;
+	char *new_str;
 
-	cur = lst;
-	while (cur)
-	{
-		next = cur->next;
-		free(cur->name);
-		free(cur->value);
-		free(cur);
-		cur = next;
-	}
-}
-
-void	ft_free_cell(t_env *lst)
-{
-	free(lst->name);
-	free(lst->value);
-	free(lst);
+	new_str = ft_strdup(new);
+	free(old);
+	return (new_str);
 }

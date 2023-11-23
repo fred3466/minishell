@@ -1,46 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free.c                                             :+:      :+:    :+:   */
+/*   ft_memchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: slecoq <slecoq@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/26 13:50:55 by slecoq            #+#    #+#             */
-/*   Updated: 2023/11/22 14:28:19 by slecoq           ###   ########.fr       */
+/*   Created: 2023/02/07 11:33:55 by slecoq            #+#    #+#             */
+/*   Updated: 2023/06/06 14:32:10 by slecoq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../libft.h"
 
-void	ft_free(char **str)
+void	*ft_memchr(const void *str, int c, size_t t)
 {
-	int	i;
+	unsigned char	*ptr;
+	unsigned char	n;
 
-	i = -1;
-	while (str[++i])
-		free(str[i]);
-	free(str);
-}
-
-void	ft_free_lstenv(t_env *lst)
-{
-	t_env	*cur;
-	t_env	*next;
-
-	cur = lst;
-	while (cur)
+	ptr = (unsigned char *)str;
+	n = (unsigned char )c;
+	while (ptr && (t > 0))
 	{
-		next = cur->next;
-		free(cur->name);
-		free(cur->value);
-		free(cur);
-		cur = next;
+		if (*ptr == n)
+			return (ptr);
+		ptr++;
+		t--;
 	}
-}
-
-void	ft_free_cell(t_env *lst)
-{
-	free(lst->name);
-	free(lst->value);
-	free(lst);
+	return (NULL);
 }

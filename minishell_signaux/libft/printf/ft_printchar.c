@@ -1,46 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free.c                                             :+:      :+:    :+:   */
+/*   ft_printchar.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: slecoq <slecoq@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/26 13:50:55 by slecoq            #+#    #+#             */
-/*   Updated: 2023/11/22 14:28:19 by slecoq           ###   ########.fr       */
+/*   Created: 2023/03/08 10:23:53 by slecoq            #+#    #+#             */
+/*   Updated: 2023/06/06 14:32:10 by slecoq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../libft.h"
 
-void	ft_free(char **str)
+int	ft_printchar(char c)
 {
-	int	i;
-
-	i = -1;
-	while (str[++i])
-		free(str[i]);
-	free(str);
-}
-
-void	ft_free_lstenv(t_env *lst)
-{
-	t_env	*cur;
-	t_env	*next;
-
-	cur = lst;
-	while (cur)
-	{
-		next = cur->next;
-		free(cur->name);
-		free(cur->value);
-		free(cur);
-		cur = next;
-	}
-}
-
-void	ft_free_cell(t_env *lst)
-{
-	free(lst->name);
-	free(lst->value);
-	free(lst);
+	write(1, &c, 1);
+	return (1);
 }

@@ -1,46 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free.c                                             :+:      :+:    :+:   */
+/*   ft_lstmap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: slecoq <slecoq@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/26 13:50:55 by slecoq            #+#    #+#             */
-/*   Updated: 2023/11/22 14:28:19 by slecoq           ###   ########.fr       */
+/*   Created: 2023/02/18 18:44:08 by slecoq            #+#    #+#             */
+/*   Updated: 2023/06/06 14:32:10 by slecoq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../libft.h"
 
-void	ft_free(char **str)
+t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 {
-	int	i;
+	t_list	*new_l;
+	t_list	*new_e;
 
-	i = -1;
-	while (str[++i])
-		free(str[i]);
-	free(str);
-}
-
-void	ft_free_lstenv(t_env *lst)
-{
-	t_env	*cur;
-	t_env	*next;
-
-	cur = lst;
-	while (cur)
+	if (lst == NULL)
+		return (NULL);
+	new_l = 0;
+	while (lst != NULL)
 	{
-		next = cur->next;
-		free(cur->name);
-		free(cur->value);
-		free(cur);
-		cur = next;
+		new_e = ft_lstnew(f(lst->content));
+		if (new_e == NULL)
+		{
+			ft_lstclear(&new_e, del);
+			return (NULL);
+		}
+		ft_lstadd_back(&new_l, new_e);
+		lst = (*lst).next;
 	}
-}
-
-void	ft_free_cell(t_env *lst)
-{
-	free(lst->name);
-	free(lst->value);
-	free(lst);
+	return (new_l);
 }

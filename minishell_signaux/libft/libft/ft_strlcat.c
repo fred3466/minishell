@@ -1,46 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free.c                                             :+:      :+:    :+:   */
+/*   ft_strlcat.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: slecoq <slecoq@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/26 13:50:55 by slecoq            #+#    #+#             */
-/*   Updated: 2023/11/22 14:28:19 by slecoq           ###   ########.fr       */
+/*   Created: 2023/02/05 13:53:32 by slecoq            #+#    #+#             */
+/*   Updated: 2023/06/06 14:32:10 by slecoq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../libft.h"
 
-void	ft_free(char **str)
+size_t	ft_strlcat(char *dest, const char *src, size_t t)
 {
-	int	i;
+	size_t	i;
+	size_t	j;
 
-	i = -1;
-	while (str[++i])
-		free(str[i]);
-	free(str);
-}
-
-void	ft_free_lstenv(t_env *lst)
-{
-	t_env	*cur;
-	t_env	*next;
-
-	cur = lst;
-	while (cur)
+	i = 0;
+	j = 0;
+	while (dest[i] && i < t)
+		i++;
+	while (src[j] && (i + j + 1) < t)
 	{
-		next = cur->next;
-		free(cur->name);
-		free(cur->value);
-		free(cur);
-		cur = next;
+		dest[i + j] = src[j];
+		j++;
 	}
-}
-
-void	ft_free_cell(t_env *lst)
-{
-	free(lst->name);
-	free(lst->value);
-	free(lst);
+	if (i < t)
+		dest[i + j] = '\0';
+	return (ft_strlen(src) + i);
 }

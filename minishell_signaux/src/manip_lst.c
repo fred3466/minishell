@@ -6,11 +6,11 @@
 /*   By: slecoq <slecoq@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 13:48:22 by slecoq            #+#    #+#             */
-/*   Updated: 2023/11/22 15:29:10 by slecoq           ###   ########.fr       */
+/*   Updated: 2023/11/22 11:20:16 by slecoq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../include/minishell.h"
 
 t_env	*ft_lstlast(t_env *lst)
 {
@@ -39,35 +39,44 @@ void	ft_lstadd_back(t_env **lst, t_env *new)
 	}
 }
 
-t_env	*lstnew_env(char *name, char *value, int b_global)
+t_env *lstnew_env(char *name, char *value)
 {
-	t_env	*lst;
+	t_env *lst;
 
 	lst = (t_env *)malloc(sizeof(t_env));
 	if (!lst)
 		return (NULL);
 	lst->name = ft_strdup(name);
 	lst->value = ft_strdup(value);
-	lst->b_global = b_global;
 	lst->next = NULL;
 	free(name);
 	free(value);
 	return (lst);
 }
 
-void	print_env_lst(t_env *env_lst)
+t_env_var *lstnew_var(char *name, char *value)
 {
+	t_env_var *lst;
+
+	lst = (t_env_var *)malloc(sizeof(t_env_var));
+	if (!lst)
+		return (NULL);
+	lst->name = ft_strdup(name);
+	lst->value = ft_strdup(value);
+	lst->next = NULL;
+	free(name);
+	free(value);
+	return (lst);
+}
+
+void print_env_lst(t_env *env_lst)
+{
+	
 	while (env_lst)
 	{
-		if (env_lst->b_global)
-		{
-			ft_printf("%s", env_lst->name);
-			ft_printf("=");
-			if (env_lst->value != NULL)
-				ft_printf("%s\n", env_lst->value);
-			else
-				ft_printf("\n");
-		}
+		ft_printf("%s", env_lst->name);
+		ft_printf("=");
+		ft_printf("%s\n", env_lst->value);
 		env_lst = env_lst->next;
 	}
 }
