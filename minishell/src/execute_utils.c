@@ -126,34 +126,32 @@ void	donne_moi_des_io(t_noeud *n_redir, t_tok	*tok_redir)
 		tok_redir->arg_utilisé = 1;
 	}
 }
-char	**donne_moi_des_arguments(t_tok	*ct, int nb_requis)
+t_arg	**donne_moi_des_arguments(t_tok	*t, int nb_requis)
 {
-	t_tok	*t = ct;
-	char		**args;
+	t_arg		**args;
+	t_tok			*save;
 	int		nb_args;
 	int		i;
 
 	nb_args = 0;
-	t = ct->suivant;
+	save = t;
+	t = t->suivant;
 	while(t && t->type == TOK_LIT)
 	{
 		nb_args++;
 		t = t->suivant;
 	}
-//	if (nb_requis !=-1 && nb_args > nb_requis)
-		//erreur trop d'arguments'
-//	args = ft_calloc(nb_args + 2, sizeof(char **));
-	args = ft_calloc(nb_args + 1 + 1, sizeof(char *));
-//	args[nb_args] = NULL;
-	args[0] = ft_strdup(ct->val);
+	t = save;
+	args = ft_calloc(nb_args + 1 + 1, sizeof(t_arg *));
+	args[0] = arg_create(t);
+
 	if (nb_args > 0)
 	{
-//		args[0] = ct->suivant->val;
 		i = 0;
-		t = ct->suivant;
+		t = t->suivant;
 		while(t && t->type == TOK_LIT)
 		{
-			args[++i] = ft_strdup(t->val);
+			args[++i] = arg_create(t);
 			t->arg_utilisé = 1;
 			t = t->suivant;
 		}

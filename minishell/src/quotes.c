@@ -1,11 +1,27 @@
 
 #include "minishell.h"
 
+int	escape(char	*s, char	*c)
+{
+	int	ret;
+
+	ret = (c && s) && (c != s && (*(c - 1)  == '\\'));
+	return  (ret);
+}
+
+
 char	*_got_q(char **s, char **p_quote_deb, char **p_quote_fin, char q)
 {
+	char	*save;
+
 	*p_quote_deb =ft_strchr(*s, q);
-	if (*p_quote_deb == *s)
+	if (*p_quote_deb)
 	{
+		if (escape(*s, *p_quote_deb))
+		{
+			save =(*p_quote_deb)+1;
+			return (_got_q(&save , p_quote_deb, p_quote_fin, q));
+		}
 		*p_quote_fin = ft_strchr(*p_quote_deb + 1, q);
 		if (*p_quote_deb && !*p_quote_fin)
 			perror("A GERER !!! problème d'apostrophe non fermé.");
@@ -15,19 +31,38 @@ char	*_got_q(char **s, char **p_quote_deb, char **p_quote_fin, char q)
 	return (*p_quote_deb);
 }
 
-int	_check_micmac(char *p_quote_deb, char *p_quote_fin, char *p_dquote_deb, char *p_dquote_fin)
+int	_check_mismatch(char **s, char c)
 {
-	if (p_quote_deb && p_dquote_deb
-			&& p_quote_deb < p_dquote_deb
-			&& p_quote_fin > p_dquote_fin)
+	int	nb;
+	char	*deb;
+
+	nb = 0;
+	deb = *s;
+	deb = ft_strchr(deb, c);
+	while (deb)
+	{
+		if (!escape(*s, deb))
+			nb++;
+		deb = ft_strchr(deb+1, c);
+	}
+	if (nb == 0)
+		return (1);
+	return (nb % 2 == 0);
+}
+
+int	_check_micmac(t_quotes_tmp *qr)
+{
+	if (qr->p_quote_deb && qr->p_dquote_deb
+			&& qr->p_quote_deb < qr->p_dquote_deb
+			&& qr->p_quote_fin > qr->p_dquote_fin)
 	{
 		perror("A GERER !!! micmac dans les apostrophes et guillemets");
 		return (0);
 	}
 
-	if (p_quote_deb && p_dquote_deb
-			&& p_quote_deb > p_dquote_deb
-			&& p_quote_fin < p_dquote_fin)
+	if (qr->p_quote_deb && qr->p_dquote_deb
+			&& qr->p_quote_deb > qr->p_dquote_deb
+			&& qr->p_quote_fin < qr->p_dquote_fin)
 	{
 		perror("A GERER !!! micmac dans les apostrophes et guillemets");
 		return (0);
@@ -35,58 +70,65 @@ int	_check_micmac(char *p_quote_deb, char *p_quote_fin, char *p_dquote_deb, char
 	return (1);
 }
 
-char	**_q_ou_dq(char **ret, char **p_quote_deb, char **p_quote_fin, char **p_dquote_deb, char **p_dquote_fin)
+t_quotes_res	*_q_ou_dq(t_quotes_res *quotes_res, t_quotes_tmp *qr)
 {
-	if (*p_quote_deb)
+	if (qr->p_quote_deb)
 		{
-			ret[0] = *p_quote_deb + 1;
-			ret[1] = *p_quote_fin;
+			quotes_res->quote_deb = qr->p_quote_deb;
+			quotes_res->quote_fin = qr->p_quote_fin;
+			quotes_res->b_in_single_quotes = 1;
 		}
-		else if (*p_dquote_deb)
+		else if (qr->p_dquote_deb)
 		{
-			ret[0]= *p_dquote_deb + 1;
-			ret[1]= *p_dquote_fin;
+			quotes_res->quote_deb= qr->p_dquote_deb;
+			quotes_res->quote_fin= qr->p_dquote_fin;
+			quotes_res->b_in_single_quotes = 0;
 		}
-	return (ret);
+	return (quotes_res);
 }
 
-char	**	_q_et_dq(char **ret, char *p_quote_deb, char *p_quote_fin, char *p_dquote_deb, char *p_dquote_fin)
+t_quotes_res	*	_q_et_dq(t_quotes_res *quotes_res, t_quotes_tmp *qr)
 {
-	if (p_quote_deb < p_dquote_deb)
+	if (qr->p_quote_deb < qr->p_dquote_deb)
 	{
-		ret[0] = p_quote_deb + 1;
-		ret[1] = p_quote_fin;
+		quotes_res->quote_deb = qr->p_quote_deb + 1;
+		quotes_res->quote_fin = qr->p_quote_fin;
+		quotes_res->b_in_single_quotes = 1;
 	}
-	else if (p_quote_deb > p_dquote_deb)
+	else if (qr->p_quote_deb > qr->p_dquote_deb)
 	{
-		ret[0]= p_dquote_deb + 1;
-		ret[1]= p_dquote_fin;
+		quotes_res->quote_deb = qr->p_dquote_deb + 1;
+		quotes_res->quote_fin= qr->p_dquote_fin;
+		quotes_res->b_in_single_quotes = 0;
 	}
-	return (ret);
+	return (quotes_res);
 }
 
-char	**quotes(char **s)
+t_quotes_res	*quotes(char **s)
 {
-	char	*p_quote_deb;
-	char	*p_quote_fin;
-	char	*p_dquote_deb;
-	char	*p_dquote_fin;
-	char	**ret;
+	t_quotes_tmp *qr;
+	t_quotes_res	*quotes_res;
 
-	p_dquote_deb = NULL;
-	p_dquote_fin = NULL;
-	p_quote_deb = NULL;
-	p_quote_fin = NULL;
-	ret = malloc(sizeof(char**) * 2);
-	ret[0] = NULL;
-	ret[1] = NULL;
-	_got_q(s, &p_quote_deb, &p_quote_fin, '\'');
-	_got_q(s, &p_dquote_deb, &p_dquote_fin, '\"');
-	if (! _check_micmac(p_quote_deb, p_quote_fin, p_dquote_deb, p_dquote_fin))
+	qr = quote_tmp_create();
+	quotes_res = quotes_res_create();
+	_got_q(s, &qr->p_quote_deb, &qr->p_quote_fin, '\'');
+	_got_q(s, &qr->p_dquote_deb, &qr->p_dquote_fin, '\"');
+	if (! _check_micmac(qr))
 		return NULL;
-	if (p_quote_deb && p_dquote_deb)
-		_q_et_dq(ret, p_quote_deb, p_quote_fin, p_dquote_deb, p_dquote_fin);
+	if ( ! _check_mismatch(s, '\''))
+	{
+		perror("Micmac avec les apostrophes.\n");
+		return NULL;
+	}
+	if ( ! _check_mismatch(s, '\"'))
+	{
+			perror("Micmac avec les guillemets.\n");
+			return NULL;
+	}
+	if (qr->p_quote_deb && qr->p_dquote_deb)
+		_q_et_dq(quotes_res, qr);
 	else
-		_q_ou_dq(ret,&p_quote_deb, &p_quote_fin, &p_dquote_deb, &p_dquote_fin);
-	return (ret);
+		_q_ou_dq(quotes_res,qr);
+	free (qr);
+	return (quotes_res);
 }

@@ -27,8 +27,12 @@
 
 #include "libft/libft.h"
 
+# ifndef DEBUG_EXP
+#  define DEBUG_EXP 0
+# endif
+
 # ifndef DEBUG_AST
-#  define DEBUG_AST 1
+#  define DEBUG_AST 0
 # endif
 
 # ifndef DEBUG_PARSE
@@ -36,11 +40,14 @@
 # endif
 
 # ifndef DEBUG_EXEC
-#  define DEBUG_EXEC 1
+#  define DEBUG_EXEC 0
 # endif
 
 # ifndef DEBUG_CLEAN
 #  define DEBUG_CLEAN 0
+# endif
+# ifndef TOK_SEPS
+#  define TOK_SEPS "|> <\n=\'\""
 # endif
 
 typedef enum e_tok_type
@@ -52,10 +59,42 @@ typedef enum e_tok_type
 	TOK_DOUBLE_GRAND, TOK_DOUBLE_PETIT
 } t_tok_type;
 
+
+typedef struct s_quotes_temp
+{
+	char	*p_quote_deb;
+	char	*p_quote_fin;
+	char	*p_dquote_deb;
+	char	*p_dquote_fin;
+} t_quotes_tmp;
+
+typedef struct s_quotes_res
+{
+	char	*quote_deb;
+	char	*quote_fin;
+	int		b_in_single_quotes;
+} t_quotes_res;
+
+typedef struct s_grab_res
+{
+	char	*val;
+	int		b_expanse_allowed;
+}	t_grab_res;
+
+typedef struct s_parse_res
+{
+	char	*fin_pre;
+	char	*s_captured;
+	char	*deb_post;
+	char	*s_rempl;
+	char	*s_pre;
+}	t_parse_res;
+
 typedef struct s_tok
 {
 	t_tok_type	type;
 	char	*val;
+	int		b_expanse_allowed;
 	int arg_utilisé;
 	struct s_tok	*precedent;
 	struct s_tok	*suivant;
@@ -80,6 +119,12 @@ typedef struct s_pipe
 	int	res_droit;
 } t_pipe;
 
+typedef struct s_arg
+{
+	char	*val;
+	int		b_expanse_allowed;
+}	t_arg;
+
 typedef struct s_noeud
 {
 	t_tok				*tok;
@@ -87,21 +132,15 @@ typedef struct s_noeud
 	char					*str_valeur;
 	struct s_noeud	*noeud_gauche;
 	struct s_noeud	*noeud_droit;
-	char					**args;
+	t_arg					**args;
 	struct s_noeud	*precedent;
 	struct s_noeud	*suivant;
 	int					fd_output;
 	int						fd_input;
 //	int					fd_heredoc;
 	char					*delim_heredoc;
+	int		b_expanse_allowed;
 }	t_noeud;
-
-//typedef struct s_env_var
-//{
-//	char 		*name;
-//	char 		*value;
-//	struct s_env_var *next;
-//}			t_env;
 
 typedef struct s_env
 {
@@ -114,19 +153,23 @@ typedef struct s_env
 typedef struct s_data
 {
 	char 		**env;
-	char **cmd;
-	struct s_arg *arg;
 	struct s_env *env_lst;
-	struct s_env_var *var;
-	int pid;
+	int	status;
 }				t_data;
 
-char	*grab(char **s);
-char	**quotes(char **s);
+char	*find_next_sep(char **s);
+t_grab_res	*grab(char **s);
+t_quotes_res	*quotes(char **s);
+int	escape(char	*s, char	*c);
 t_tok		*create_tok(char **val, t_tok *tok_last);
 
+t_parse_res	*parse_res_create();
+t_quotes_tmp	*quote_tmp_create();
+t_quotes_res	*quotes_res_create();
 t_tok		*tok_create(char *val, t_tok_type type);
 t_noeud	*noeud_create(t_tok *t, t_noeud *rec);
+t_grab_res	*grab_res_create();
+t_arg	*arg_create(t_tok	*t);
 
 void	dbg_tab(char **t);
 
@@ -134,18 +177,18 @@ int	interprete(int piped, t_noeud *n, t_data *data);
 int	_interpret_bi(t_noeud	*n, t_data *data);
 char			*find_exe(char *env_path, char *fname);
 int	run_exe(int piped, char *path, char *args[], char *const envp[]);
-char			**donne_moi_des_arguments(t_tok	*ct, int nb_requis);
+t_arg	**donne_moi_des_arguments(t_tok	*ct, int nb_requis);
 void			donne_moi_des_io(t_noeud *n, t_tok	*ct);
 void pipe_show(int piped,t_pipe	*pipe_ret, t_noeud	*n, t_data *data);
 void 		my_heredoc(t_noeud	*n);
 void	my_error(char *s);
-
+void	expand(t_noeud *n, t_env *env_lst);
+t_tok		*create_tok(char **val, t_tok *tok_last);
 int			bi_cd(t_noeud *n);
 int			bi_pwd();
 int bi_export(t_noeud *n, t_data *data);
 int bi_env(t_noeud *n, t_data *data);
 
-void	dbg_tab(char **t );
 void	dbg_tree(t_noeud	*root, char* pre);
 void	debug_rebuild_cmdline(t_noeud *root);
 void	dbg_tok(t_tok	*tok_root);
@@ -161,6 +204,8 @@ void ft_free_cell(t_env *lst);
 
 t_env *add_var_env(t_env *env_lst, t_env *var);
 t_env *remove_var_env(t_env *env_lst, t_env *var);
+char *get_var_env(t_env *env_lst,char *name);
+
 t_env	*ft_lstlast(t_env *lst);
 void	ft_lstadd_back(t_env **lst, t_env *new);
 t_env *lstnew_env(char *name, char *value, int b_global);

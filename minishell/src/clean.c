@@ -35,9 +35,9 @@ void	kill_tok(t_tok *tok_depart)
 		t = NULL;
 }
 
-void	kill_args(char	 **args)
+void	kill_args(t_arg **args)
 {
-	char **args_save;
+	t_arg **args_save;
 
 	args_save = args;
 	while(args && *args)

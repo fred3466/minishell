@@ -12,6 +12,19 @@
 
 #include "minishell.h"
 
+char *get_var_env(t_env *env,char *name)
+{
+	while (env)
+	{
+		if (!ft_strncmp(env->name, name, ft_strlen(name)))
+		{
+			return (env->value);
+		}
+		env = env->next;
+	}
+	return (name);
+}
+
 t_env *add_var_env(t_env *env_lst, t_env *var)
 {
 	t_env *head;
@@ -38,6 +51,8 @@ t_env *remove_var_env(t_env *env_lst, t_env *var)
 	t_env *head;
 	t_env *prev;
 
+
+
 	head = env_lst;
 	prev = NULL;
 	if (!ft_strncmp(env_lst->name, var->name, ft_strlen(env_lst->name)))
@@ -57,6 +72,40 @@ t_env *remove_var_env(t_env *env_lst, t_env *var)
 		env_lst = env_lst->next;
 	}
 	return (head);
+}
+
+t_env *remove_from_env(t_env *env_lst, char ** var_name_list)
+{
+	t_env  *crt;
+	t_env *new_list;
+	t_env *new;
+	char	*name;
+	int	i;
+
+	new_list = NULL;
+	crt = env_lst;
+	while (crt)
+	{
+		name = ft_strdup(crt->name);
+		int	b_found = 0;
+		i = -1;
+		while (var_name_list[++i])
+		{
+			b_found =! ft_strncmp(name, var_name_list[i], ft_strlen(name));
+					if (b_found)
+						break;
+		}
+
+			if (! b_found)
+			{
+				new = lstnew_env(name,ft_strdup(crt->value) , crt->b_global);
+				ft_lstadd_back(&new_list, new);
+			}
+			else
+				free (name);
+		crt = crt->next;
+	}
+	return (new_list);
 }
 
 t_env *init_env(char **env)

@@ -28,6 +28,7 @@ void	on_spaces(char **s_init)
 t_tok	*parse(char *s_init)
 {
 	char		*tok_val;
+	t_grab_res *gr;
 	char	*save_tok_val;
 	t_tok	*tok;
 	t_tok	*tok_root;
@@ -43,10 +44,11 @@ t_tok	*parse(char *s_init)
 		on_spaces(s);
 		if(! **s)
 			break ;
-		tok_val = grab(s);
-//		printf("tok_val:\t%s\n",tok_val);
+		gr =grab(s);
+		tok_val = gr->val;
 		save_tok_val = tok_val;
 		tok = create_tok(&tok_val, tok_last);
+		tok->b_expanse_allowed = gr->b_expanse_allowed;
 		free (save_tok_val);
 		if (!tok_root)
 			tok_root = tok;
@@ -156,9 +158,13 @@ int	main(int ac, char **av, char **env)
 	ft_memset(&data, 0, sizeof(t_data));
 	data.env_lst = init_env(env);
 	data.env = new_env(data.env_lst);
+
+//	char	*unset_var_lst[3] = {"USER", "USERNAME", "\0"};
+//	unset(&data, unset_var_lst);
 	while(line)
 	{
-		printf("\n----------------------------------------\n%s\n",line);
+		if (DEBUG_EXEC)
+			printf("\n----------------------------------------\n%s\n",line);
 //		line_copy = ft_strdup(line);
 		tok_root = parse(line);
 		if (DEBUG_PARSE)
@@ -192,6 +198,8 @@ int	main(int ac, char **av, char **env)
 		my_error("main ");
 		 errno = 0;
 	}
+	ft_free_lstenv(data.env_lst);
+	ft_free(data.env);
 	//////////////
 	if(fd!=-1)
 		close(fd);

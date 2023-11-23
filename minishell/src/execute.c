@@ -1,5 +1,26 @@
 #include "minishell.h"
 
+char	**_tabbed_args_val(t_arg **args)
+{
+	char **r;
+	char **ret;
+	int	nb;
+	t_arg **	save;
+	char	*val;
+
+	save = args;
+	while (*args++)
+		nb++;
+	args = save;
+	r = malloc(sizeof(t_arg *) * (nb + 1));
+	ret=r;
+	while (*args)
+		*r++ =  (*args++)->val;
+	*r = NULL;
+//	args = save;
+	return (ret);
+}
+
 int	_interpret_ext(int piped, t_noeud	*n, char **env)
 {
 	int	res;
@@ -10,7 +31,7 @@ int	_interpret_ext(int piped, t_noeud	*n, char **env)
 	res = -1;
 	path_env = getenv("PATH");
 	exe_path = find_exe(path_env, n->str_valeur);
-	args = n->args;
+	args = _tabbed_args_val(n->args);
 //	if(res != -1)
 	if (exe_path != NULL)
 	{
@@ -37,10 +58,6 @@ int	_interpret_ext(int piped, t_noeud	*n, char **env)
 			close(n->fd_input);
 		}
 
-//		char *a=(ft_strdup(*args));
-//		char *p=(ft_strdup(exe_path));
-//		kill_tok(n->tok);
-//		kill_AST(n);
 		res = run_exe(piped, exe_path, args, env);
 		my_error("_interpret_ext");
 		// free (exe_path);
@@ -92,6 +109,7 @@ int	interprete(int piped, t_noeud *n, t_data *data)
 	if (n->type == LITTERAL)
 	{
 //		dprintf(2, "\n***process LITTERAL %s\n", n->str_valeur);
+		expand(n, data->env_lst);
 		res = _interpret_bi(n, data);
 		if (res == 1)
 		{
