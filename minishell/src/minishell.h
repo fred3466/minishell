@@ -27,20 +27,27 @@
 
 #include "libft/libft.h"
 
+# ifndef DEBUG_EXP
+#  define DEBUG_EXP 0
+# endif
+
 # ifndef DEBUG_AST
-#  define DEBUG_AST 1
+#  define DEBUG_AST 0
 # endif
 
 # ifndef DEBUG_PARSE
-#  define DEBUG_PARSE 1
+#  define DEBUG_PARSE 0
 # endif
 
 # ifndef DEBUG_EXEC
-#  define DEBUG_EXEC 1
+#  define DEBUG_EXEC 0
 # endif
 
 # ifndef DEBUG_CLEAN
 #  define DEBUG_CLEAN 0
+# endif
+# ifndef TOK_SEPS
+#  define TOK_SEPS "|> <\n=\'\""
 # endif
 
 typedef enum e_tok_type
@@ -51,6 +58,23 @@ typedef enum e_tok_type
 	TOK_GRAND, TOK_PETIT,
 	TOK_DOUBLE_GRAND, TOK_DOUBLE_PETIT
 } t_tok_type;
+
+typedef struct s_quotes_res
+{
+	char	*p_quote_deb;
+	char	*p_quote_fin;
+	char	*p_dquote_deb;
+	char	*p_dquote_fin;
+} t_quotes_res;
+
+typedef struct s_parse_res
+{
+	char	*fin_pre;
+	char	*s_captured;
+	char	*deb_post;
+	char	*s_rempl;
+	char	*s_pre;
+}	t_parse_res;
 
 typedef struct s_tok
 {
@@ -114,17 +138,17 @@ typedef struct s_env
 typedef struct s_data
 {
 	char 		**env;
-	char **cmd;
-	struct s_arg *arg;
 	struct s_env *env_lst;
-	struct s_env_var *var;
-	int pid;
+	int	status;
 }				t_data;
 
+char	*find_next_sep(char **s);
 char	*grab(char **s);
 char	**quotes(char **s);
+int	escape(char	*s, char	*c);
 t_tok		*create_tok(char **val, t_tok *tok_last);
-
+t_parse_res	*parse_res_create();
+t_quotes_res	*quote_res_create();
 t_tok		*tok_create(char *val, t_tok_type type);
 t_noeud	*noeud_create(t_tok *t, t_noeud *rec);
 
@@ -161,6 +185,11 @@ void ft_free_cell(t_env *lst);
 
 t_env *add_var_env(t_env *env_lst, t_env *var);
 t_env *remove_var_env(t_env *env_lst, t_env *var);
+
+void	expand(t_noeud *n, t_env *env_lst);
+
+char *get_var_env(t_env *env_lst,char *name);
+
 t_env	*ft_lstlast(t_env *lst);
 void	ft_lstadd_back(t_env **lst, t_env *new);
 t_env *lstnew_env(char *name, char *value, int b_global);

@@ -158,7 +158,8 @@ int	main(int ac, char **av, char **env)
 	data.env = new_env(data.env_lst);
 	while(line)
 	{
-		printf("\n----------------------------------------\n%s\n",line);
+		if (DEBUG_EXEC)
+			printf("\n----------------------------------------\n%s\n",line);
 //		line_copy = ft_strdup(line);
 		tok_root = parse(line);
 		if (DEBUG_PARSE)
@@ -192,6 +193,8 @@ int	main(int ac, char **av, char **env)
 		my_error("main ");
 		 errno = 0;
 	}
+	ft_free_lstenv(data.env_lst);
+	ft_free(data.env);
 	//////////////
 	if(fd!=-1)
 		close(fd);

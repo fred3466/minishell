@@ -92,6 +92,7 @@ int	interprete(int piped, t_noeud *n, t_data *data)
 	if (n->type == LITTERAL)
 	{
 //		dprintf(2, "\n***process LITTERAL %s\n", n->str_valeur);
+		expand(n, data->env_lst);
 		res = _interpret_bi(n, data);
 		if (res == 1)
 		{

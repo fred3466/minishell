@@ -16,3 +16,9 @@ rev<<.
 rev <<. < heredoc_test.txt
 cp -v toto_to_born2  toto|rev 
 echo "toto titi"
+ a='1 2 3'
+ env
+  a=toto
+  env
+   da"ns $PWD, voilà" !
+  

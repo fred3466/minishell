@@ -140,20 +140,15 @@ char	**donne_moi_des_arguments(t_tok	*ct, int nb_requis)
 		nb_args++;
 		t = t->suivant;
 	}
-//	if (nb_requis !=-1 && nb_args > nb_requis)
-		//erreur trop d'arguments'
-//	args = ft_calloc(nb_args + 2, sizeof(char **));
 	args = ft_calloc(nb_args + 1 + 1, sizeof(char *));
-//	args[nb_args] = NULL;
-	args[0] = ft_strdup(ct->val);
+	args[0] = (ct->val);
 	if (nb_args > 0)
 	{
-//		args[0] = ct->suivant->val;
 		i = 0;
 		t = ct->suivant;
 		while(t && t->type == TOK_LIT)
 		{
-			args[++i] = ft_strdup(t->val);
+			args[++i] = (t->val);
 			t->arg_utilisé = 1;
 			t = t->suivant;
 		}

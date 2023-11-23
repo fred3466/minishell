@@ -1,5 +1,2 @@
- a='1 2 3'
- env
-  a=toto
-  env
-  
+echo  da\'ns "$PWD," voilà\' !
+echo     da"ns $PWD, voilà" !

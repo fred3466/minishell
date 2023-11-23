@@ -49,6 +49,31 @@ t_node_type	_from_tok_type_to_cmd_type(t_tok_type t_type)
 
 }
 
+t_parse_res	*parse_res_create()
+{
+	t_parse_res *pr;
+
+	pr = malloc(sizeof(t_parse_res));
+	pr->deb_post = NULL;
+	pr->fin_pre = NULL;
+	pr->s_captured = NULL;
+	pr->s_pre = NULL;
+	pr->s_rempl = NULL;
+	return (pr);
+}
+
+t_quotes_res	*quote_res_create()
+{
+	t_quotes_res *pr;
+
+	pr = malloc(sizeof(t_quotes_res));
+	pr->p_quote_deb = NULL;
+	pr->p_quote_fin = NULL;
+	pr->p_dquote_deb = NULL;
+	pr->p_dquote_fin = NULL;
+	return (pr);
+}
+
 t_noeud	*noeud_create(t_tok *t, t_noeud *prec)
 {
 	t_noeud	*n;
