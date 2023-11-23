@@ -6,7 +6,7 @@
 /*   By: slecoq <slecoq@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 13:53:54 by slecoq            #+#    #+#             */
-/*   Updated: 2023/11/22 15:05:09 by slecoq           ###   ########.fr       */
+/*   Updated: 2023/11/23 13:45:32 by slecoq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,10 @@
 char *get_var_env(t_env *env_lst,char *name)
 {
 	t_env *head;
+
+	head = env_lst;
+	t_env *head;
+	
 
 	head = env_lst;
 	while (head)
