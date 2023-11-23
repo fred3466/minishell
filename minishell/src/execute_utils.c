@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int	run_exe(int piped, char *path, char *args[], char *const envp[])
+int	run_exe(int piped, char *path, char *args[], t_data *data)
 {
 	pid_t	pid;
 	int	status;
@@ -13,17 +13,17 @@ int	run_exe(int piped, char *path, char *args[], char *const envp[])
 		pid = fork();
 		if (pid == 0)
 		{
-			res = execve(path, args, envp);
+			res = execve(path, args, data->env);
 			my_error("execve");
 		}
 		else
 		{
-			waitpid(pid, &status, 0);
+			waitpid(pid, &(data->status), 0);
 		}
 	}
 	else
 	{
-		res = execve(path, args, envp);
+		res = execve(path, args, data->env);
 		my_error("piped execve");
 	}
 	free(path);
@@ -141,17 +141,26 @@ t_arg	**donne_moi_des_arguments(t_tok	*t, int nb_requis)
 		nb_args++;
 		t = t->suivant;
 	}
+<<<<<<< HEAD
 	t = save;
 	args = ft_calloc(nb_args + 1 + 1, sizeof(t_arg *));
 	args[0] = arg_create(t);
 
+=======
+	args = ft_calloc(nb_args + 1 + 1, sizeof(char *));
+	args[0] = (ct->val);
+>>>>>>> 0638308f0a99953bbfc96934b5138f808ae2ad15
 	if (nb_args > 0)
 	{
 		i = 0;
 		t = t->suivant;
 		while(t && t->type == TOK_LIT)
 		{
+<<<<<<< HEAD
 			args[++i] = arg_create(t);
+=======
+			args[++i] = (t->val);
+>>>>>>> 0638308f0a99953bbfc96934b5138f808ae2ad15
 			t->arg_utilisé = 1;
 			t = t->suivant;
 		}

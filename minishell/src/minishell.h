@@ -6,7 +6,7 @@
 /*   By: slecoq <slecoq@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 23:35:44 by fbourgue          #+#    #+#             */
-/*   Updated: 2023/11/20 14:28:22 by slecoq           ###   ########.fr       */
+/*   Updated: 2023/11/23 13:33:29 by slecoq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@
 # endif
 
 # ifndef DEBUG_PARSE
-#  define DEBUG_PARSE 1
+#  define DEBUG_PARSE 0
 # endif
 
 # ifndef DEBUG_EXEC
@@ -180,9 +180,10 @@ int	run_exe(int piped, char *path, char *args[], char *const envp[]);
 t_arg	**donne_moi_des_arguments(t_tok	*ct, int nb_requis);
 void			donne_moi_des_io(t_noeud *n, t_tok	*ct);
 void pipe_show(int piped,t_pipe	*pipe_ret, t_noeud	*n, t_data *data);
-void 		my_heredoc(t_noeud	*n);
+void my_heredoc(t_noeud	*n, t_data *data);
 void	my_error(char *s);
-void	expand(t_noeud *n, t_env *env_lst);
+void	expand(t_noeud *n, t_env *env_lst, int last_exec_status);
+
 t_tok		*create_tok(char **val, t_tok *tok_last);
 int			bi_cd(t_noeud *n);
 int			bi_pwd();

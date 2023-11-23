@@ -63,11 +63,16 @@ t_parse_res	*parse_res_create()
 	return (pr);
 }
 
+<<<<<<< HEAD
 t_quotes_res	*quotes_res_create()
+=======
+t_quotes_res	*quote_res_create()
+>>>>>>> 0638308f0a99953bbfc96934b5138f808ae2ad15
 {
 	t_quotes_res *pr;
 
 	pr = malloc(sizeof(t_quotes_res));
+<<<<<<< HEAD
 	pr->quote_deb = NULL;
 	pr->quote_fin = NULL;
 	pr->b_in_single_quotes = 0;
@@ -98,6 +103,8 @@ t_quotes_tmp	*quote_tmp_create()
 	t_quotes_tmp *pr;
 
 	pr = malloc(sizeof(t_quotes_tmp));
+=======
+>>>>>>> 0638308f0a99953bbfc96934b5138f808ae2ad15
 	pr->p_quote_deb = NULL;
 	pr->p_quote_fin = NULL;
 	pr->p_dquote_deb = NULL;

@@ -54,8 +54,8 @@ void pipe_show(int piped,t_pipe	*pipe_ret, t_noeud	*n, t_data *data)
 //		if (DEBUG_EXEC)
 //			fprintf(stderr, "process %d exits with %d\n", pid, WEXITSTATUS(status));
 
-	waitpid(pipe_ret->pid_gauche, NULL, 0);
-	waitpid(pipe_ret->pid_droit, NULL, 0);
+	waitpid(pipe_ret->pid_gauche, &(data->status), 0);
+	waitpid(pipe_ret->pid_droit, &(data->status), 0);
 	my_error("pipe_show 2 ");
 	if (DEBUG_EXEC)
 		dprintf(2,"Retour de pipe : %d et %d\n", pipe_ret->res_gauche,pipe_ret->res_droit);
@@ -82,7 +82,7 @@ int is_heredoc_delim(char *s, char 	*p_fin)
 	return (found == 0);
 }
 
-void my_heredoc(t_noeud	*n)
+void my_heredoc(t_noeud	*n, t_data *data)
 {
 	int		fd_pipe[2];
 	int		pid;
@@ -127,7 +127,7 @@ void my_heredoc(t_noeud	*n)
 	else
 	{
 //		(pid = wait(&status)) != -1;
-		waitpid(pid, &pid, 0);
+		waitpid(pid, &(data->status), 0);
 		n->fd_input = fd_pipe[0];
 
 		//		signal(SIGQUIT, ft_sigquit_handler);

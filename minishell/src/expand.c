@@ -18,12 +18,14 @@ int is_caract_autorises(char c, int b_first)
 
 	ret = 0;
 	if (b_first)
+	{
 		ret = ft_isalpha(c);
+		if (c == '?')
+				ret = -1;
+	}
 	else
 	{
-		ret = ft_isalnum(c);
-		if (! ret)
-			ret  = c ==  '_';
+		ret = ft_isalnum(c) || c ==  '_';
 	}
 	return (ret);
 }
@@ -42,6 +44,35 @@ void	_capture(t_parse_res *pr, char *s_start_with_$)
 		{
 				sep = s_start_with_$;
 				break ;
+		}
+	}
+	s_start_with_$ = p_s_start_with_$;
+	var_name = ft_substr((s_start_with_$), 0, sep- s_start_with_$);
+	pr ->s_captured = var_name;
+	pr->fin_pre = s_start_with_$;
+	pr->deb_post = sep;
+//	pr->post = sep;
+}
+void	_capture(t_parse_res *pr, char *s_start_with_$)
+{
+	char	*sep;
+	char	*sep_end;
+	char	*var_name;
+	char	*p_s_start_with_$;
+	int	res_is_caract_autorises;
+
+	p_s_start_with_$ = s_start_with_$;
+	while( ++s_start_with_$)
+	{
+		res_is_caract_autorises = is_caract_autorises(*s_start_with_$, (p_s_start_with_$ + 1) == s_start_with_$);
+		if (! res_is_caract_autorises || (res_is_caract_autorises == -1))
+		{
+			if (res_is_caract_autorises == -1)
+				sep = ++s_start_with_$;
+			else
+				sep = s_start_with_$;
+
+			break ;
 		}
 	}
 	s_start_with_$ = p_s_start_with_$;
@@ -153,8 +184,47 @@ char	*_parse(char **s, t_env *env_lst)
 	*s = save_s;
 	return (new);
 }
+char	*_parse(char **s, t_env *env_lst, int last_exec_status)
+{
+	t_parse_res	*pr;
+	char	*new;
+	char	*save_s;
+	int	sz;
 
-void	expand(t_noeud *n, t_env *env_lst)
+	if (DEBUG_EXP)
+		dprintf(2, "----------\nparse [%s]\n",*s);
+	save_s = *s;
+	new = ft_strdup("");
+	while(s && *s && **s)
+	{
+		pr = _get_next_var(*s);
+		if (pr->s_captured)
+		{
+			if (ft_strncmp(pr->s_captured, "$?", 2) == 0)
+				pr->s_rempl = ft_itoa(last_exec_status);
+			else
+				pr->s_rempl = get_var_env(env_lst, (pr->s_captured) + 1);
+			if (DEBUG_EXP)
+			{
+				dprintf(2, "\trempl.\t[%s] <= [%s]\n", pr->s_captured,pr->s_rempl);
+				dprintf(2, "\tstatic\t [%s]\n", pr->s_pre);
+			}
+		}
+		concat(&new, pr->s_pre);
+		concat(&new, pr->s_rempl);
+		concat(&new, pr->deb_post);
+		sz = ft_strlen(pr->s_pre) + ft_strlen(pr->s_captured)+ ft_strlen(pr->deb_post);
+		*s += sz;
+	}
+	free (pr->s_captured);
+	free (pr->s_pre);
+//	free (pr->s_rempl);
+	free (pr);
+	*s = save_s;
+	return (new);
+}
+
+void	expand(t_noeud *n, t_env *env_lst, int last_exec_status)
 {
 	char	*save;
 	t_arg	*arg;
@@ -164,7 +234,7 @@ void	expand(t_noeud *n, t_env *env_lst)
 //	copy = (n->str_valeur);
 	if (n->b_expanse_allowed)
 	{
-		save = _parse(&n->str_valeur, env_lst);
+		save = _parse(&n->str_valeur, env_lst, last_exec_status);
 		free (n->str_valeur);
 		n->str_valeur = save;
 	}

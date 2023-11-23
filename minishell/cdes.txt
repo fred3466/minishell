@@ -1,3 +1,9 @@
+<<<<<<< HEAD
   echo  da\'ns "$PWD," voilà\' !
 echo     da"ns $PWD, voilà" !
 echo     "   $PWD, voilà" !
+=======
+echo titi$?toto
+echo $?toto
+echo titi$?
+>>>>>>> 0638308f0a99953bbfc96934b5138f808ae2ad15
