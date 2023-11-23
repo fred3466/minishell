@@ -12,7 +12,20 @@
 
 #include "minishell.h"
 
-t_env	*add_var_env(t_env *env_lst, t_env *var)
+char *get_var_env(t_env *head,char *name)
+{
+	while (head)
+	{
+		if (!ft_strncmp(env_lst->name, name, ft_strlen(name)))
+		{
+			return (env_lst->value);
+		}
+		head = head->next;
+	}
+	return (name);
+}
+
+t_env *add_var_env(t_env *env_lst, t_env *var)
 {
 	t_env	*head;
 	t_env	*new;
