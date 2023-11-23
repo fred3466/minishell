@@ -186,7 +186,7 @@ void ft_free_cell(t_env *lst);
 t_env *add_var_env(t_env *env_lst, t_env *var);
 t_env *remove_var_env(t_env *env_lst, t_env *var);
 
-void	expand(t_noeud *n, t_env *env_lst);
+void	expand(t_noeud *n, t_env *env_lst, int last_exec_status);
 
 char *get_var_env(t_env *env_lst,char *name);
 

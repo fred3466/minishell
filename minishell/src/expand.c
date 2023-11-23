@@ -18,12 +18,14 @@ int is_caract_autorises(char c, int b_first)
 
 	ret = 0;
 	if (b_first)
+	{
 		ret = ft_isalpha(c);
+		if (c == '?')
+				ret = -1;
+	}
 	else
 	{
-		ret = ft_isalnum(c);
-		if (! ret)
-			ret  = c ==  '_';
+		ret = ft_isalnum(c) || c ==  '_';
 	}
 	return (ret);
 }
@@ -34,14 +36,20 @@ void	_capture(t_parse_res *pr, char *s_start_with_$)
 	char	*sep_end;
 	char	*var_name;
 	char	*p_s_start_with_$;
+	int	res_is_caract_autorises;
 
 	p_s_start_with_$ = s_start_with_$;
 	while( ++s_start_with_$)
 	{
-		if (! is_caract_autorises(*s_start_with_$, p_s_start_with_$ == s_start_with_$))
+		res_is_caract_autorises = is_caract_autorises(*s_start_with_$, (p_s_start_with_$ + 1) == s_start_with_$);
+		if (! res_is_caract_autorises || (res_is_caract_autorises == -1))
 		{
+			if (res_is_caract_autorises == -1)
+				sep = ++s_start_with_$;
+			else
 				sep = s_start_with_$;
-				break ;
+
+			break ;
 		}
 	}
 	s_start_with_$ = p_s_start_with_$;
@@ -117,7 +125,7 @@ void	concat(char **s1, char *s2)
 	}
 }
 
-char	*_parse(char **s, t_env *env_lst)
+char	*_parse(char **s, t_env *env_lst, int last_exec_status)
 {
 	t_parse_res	*pr;
 	char	*new;
@@ -133,7 +141,10 @@ char	*_parse(char **s, t_env *env_lst)
 		pr = _get_next_var(*s);
 		if (pr->s_captured)
 		{
-			pr->s_rempl = get_var_env(env_lst, (pr->s_captured) + 1);
+			if (ft_strncmp(pr->s_captured, "$?", 2) == 0)
+				pr->s_rempl = ft_itoa(last_exec_status);
+			else
+				pr->s_rempl = get_var_env(env_lst, (pr->s_captured) + 1);
 			if (DEBUG_EXP)
 			{
 				dprintf(2, "\trempl.\t[%s] <= [%s]\n", pr->s_captured,pr->s_rempl);
@@ -154,7 +165,7 @@ char	*_parse(char **s, t_env *env_lst)
 	return (new);
 }
 
-void	expand(t_noeud *n, t_env *env_lst)
+void	expand(t_noeud *n, t_env *env_lst, int last_exec_status)
 {
 	char	*save;
 	char	*arg;
@@ -162,7 +173,7 @@ void	expand(t_noeud *n, t_env *env_lst)
 	char	*copy;
 
 //	copy = (n->str_valeur);
-	save = _parse(&n->str_valeur, env_lst);
+	save = _parse(&n->str_valeur, env_lst, last_exec_status);
 	free (n->str_valeur);
 	n->str_valeur = save;
 //	free (copy);
@@ -170,7 +181,7 @@ void	expand(t_noeud *n, t_env *env_lst)
 	while (n && arg_save && *arg_save)
 	{
 		arg = *arg_save;
-		save = _parse(&arg, env_lst);
+		save = _parse(&arg, env_lst, last_exec_status);
 		*arg_save = save;
 		(arg_save)++;
 	}

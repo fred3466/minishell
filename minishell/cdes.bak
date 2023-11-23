@@ -20,5 +20,11 @@ echo "toto titi"
  env
   a=toto
   env
-   da"ns $PWD, voilà" !
+echo  da\'ns "$PWD," voilà\' !
+echo     da"ns $PWD, voilà" !
+echo 123          456
+echo titi$?toto
+echo $?toto
+echo titi$?
+
   
